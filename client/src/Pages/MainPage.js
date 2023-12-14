@@ -1,14 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../App.css";
 import Footer from "../Components/Footer";
 import Navbar from "../Components/Navbar";
 import Button from "../Components/Button";
 import ModalLogin from "../Components/ModalLogin";
 import RegisterModal from "../Components/RegisterModal";
+import { useNavigate } from 'react-router-dom';
 
 const MainPage = () => {
+  const navigate = useNavigate();
+
   const [isModalOpen, setModalOpen] = useState(false);
   const [isLoginForm, setLoginForm] = useState(true);
+
+  useEffect(() => {
+    if (isModalOpen) {
+      navigate(isLoginForm ? "/login" : "/register", { replace: true });
+    } else {
+      navigate("/", { replace: true });
+    }
+  }, [isModalOpen, isLoginForm]);
 
   function authorize() {
     setModalOpen(true);
