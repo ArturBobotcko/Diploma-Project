@@ -13,12 +13,26 @@ const RegisterPage = ({ onToggleForm }) => {
     },
   ];
 
-  const handleSubmit = (event) => {
-    // Обработка регистрации
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const form = document.querySelector('.auth-form');
+    try {
+      const repsponse = await fetch("http://localhost:8000/login.php", {
+        method: "POST",
+        body: new FormData(form)
+      });
+    } catch (error) {
+      console.error("Ошибка при отправке запроса: ", error);
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="auth-form">
+    <form 
+      action="http://localhost:8000/register.php"
+      method="post"
+      onSubmit={handleSubmit}
+      className="auth-form"
+    >
       <Typography
         variant="h1"
         fontSize={30}
@@ -28,6 +42,7 @@ const RegisterPage = ({ onToggleForm }) => {
         Регистрация
       </Typography>
       <TextField
+        name="login"
         fullWidth={true}
         margin="normal"
         label="Логин"
@@ -35,6 +50,7 @@ const RegisterPage = ({ onToggleForm }) => {
         placeholder="Введите ваш логин"
       />
       <TextField
+        name="email"
         fullWidth={true}
         margin="normal"
         label="Email"
@@ -42,6 +58,7 @@ const RegisterPage = ({ onToggleForm }) => {
         placeholder="Введите адрес вашей электронной почты"
       />
       <TextField
+        name="surname"
         fullWidth={true}
         margin="normal"
         label="Фамилия"
@@ -49,6 +66,7 @@ const RegisterPage = ({ onToggleForm }) => {
         placeholder="Введите вашу фамилию"
       />
       <TextField
+        name="name"
         fullWidth={true}
         margin="normal"
         label="Имя"
@@ -56,6 +74,7 @@ const RegisterPage = ({ onToggleForm }) => {
         placeholder="Введите ваше имя"
       />
       <TextField
+        name="patronym"
         fullWidth={true}
         margin="normal"
         label="Отчество"
@@ -63,6 +82,7 @@ const RegisterPage = ({ onToggleForm }) => {
         placeholder="Введите ваше отчество (необязательно)"
       />
       <TextField
+        name="roll"
         fullWidth={true}
         margin="normal"
         label="Роль"
@@ -77,6 +97,7 @@ const RegisterPage = ({ onToggleForm }) => {
         ))}
       </TextField>
       <TextField
+        name="password"
         fullWidth={true}
         margin="normal"
         label="Пароль"
@@ -85,6 +106,7 @@ const RegisterPage = ({ onToggleForm }) => {
         placeholder="Введите ваш пароль"
       />
       <TextField
+        name="confirmPassword"
         fullWidth={true}
         margin="normal"
         label="Подтвердите пароль"

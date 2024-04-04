@@ -1,15 +1,39 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { TextField, Button, Typography } from "@mui/material";
 
 const LoginPage = ({ onToggleForm }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const handleSubmit = (event) => {
-    // Обработка входа
+
+  const navigate = useNavigate();
+  
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const form = document.querySelector('.auth-form');
+    try {
+      const repsponse = await fetch("http://localhost:8000/login.php", {
+        method: "POST",
+        body: new FormData(form)
+      });
+
+      if (repsponse.ok) {
+        navigate("/another-page"); // Перейти на главную страницу сайта после логина
+      } else {
+        // Обработка ошибки
+      }
+    } catch (error) {
+      console.error("Ошибка при отправке запроса: ", error);
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="auth-form">
+    <form 
+      action="http://localhost:8000/login.php"
+      method="post"
+      onSubmit={handleSubmit}
+      className="auth-form"
+    >
       <Typography
         variant="h1"
         fontSize={30}
@@ -19,6 +43,7 @@ const LoginPage = ({ onToggleForm }) => {
         Авторизация
       </Typography>
       <TextField
+        name="login"
         fullWidth={true}
         margin="normal"
         label="Логин"
@@ -26,6 +51,7 @@ const LoginPage = ({ onToggleForm }) => {
         placeholder="Введите ваш логин"
       />
       <TextField
+        name="password"
         fullWidth={true}
         margin="normal"
         label="Пароль"
