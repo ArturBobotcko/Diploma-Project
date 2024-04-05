@@ -6,4 +6,3 @@
     }
     
     echo("Hello from server $login");
-?>

@@ -1,0 +1,19 @@
+[Fri Apr 05 20:21:43.278172 2024] [mpm_winnt:notice] [pid 14692:tid 356] AH00455: Apache/2.4.58 (Win64) PHP/8.3.2 configured -- resuming normal operations
+[Fri Apr 05 20:21:43.278172 2024] [mpm_winnt:notice] [pid 14692:tid 356] AH00456: Apache Lounge VS17 Server built: Jan 30 2024 19:01:23
+[Fri Apr 05 20:21:43.278172 2024] [core:notice] [pid 14692:tid 356] AH00094: Command line: 'C:\\Apache24\\bin\\httpd.exe -d C:/Apache24'
+[Fri Apr 05 20:21:43.281145 2024] [mpm_winnt:notice] [pid 14692:tid 356] AH00418: Parent: Created child process 19020
+Apache server shutdown initiated...
+pm_winnt:notice] [pid 19020:tid 352] AH00354: Child: Starting 64 worker threads.
+[Fri Apr 05 20:25:51.445156 2024] [mpm_winnt:notice] [pid 14692:tid 356] AH00422: Parent: Received shutdown signal -- Shutting down the server.
+[Fri Apr 05 20:25:53.465133 2024] [mpm_winnt:notice] [pid 19020:tid 352] AH00364: Child: All worker threads have exited.
+[Fri Apr 05 20:25:53.485144 2024] [mpm_winnt:notice] [pid 14692:tid 356] AH00430: Parent: Child process 19020 exited successfully.
+Starting the 'Apache2.4' service
+The 'Apache2.4' service is running.
+pm_winnt:notice] [pid 13704:tid 352] AH00455: Apache/2.4.58 (Win64) PHP/8.3.2 configured -- resuming normal operations
+[Fri Apr 05 20:30:19.025689 2024] [mpm_winnt:notice] [pid 13704:tid 352] AH00456: Apache Lounge VS17 Server built: Jan 30 2024 19:01:23
+[Fri Apr 05 20:30:19.025689 2024] [core:notice] [pid 13704:tid 352] AH00094: Command line: 'C:\\Apache24\\bin\\httpd.exe -d C:/Apache24'
+[Fri Apr 05 20:30:19.027546 2024] [mpm_winnt:notice] [pid 13704:tid 352] AH00418: Parent: Created child process 19072
+[Fri Apr 05 20:30:19.281747 2024] [mpm_winnt:notice] [pid 19072:tid 412] AH00354: Child: Starting 64 worker threads.
+[Fri Apr 05 20:30:48.361441 2024] [mpm_winnt:notice] [pid 13704:tid 352] AH00422: Parent: Received shutdown signal -- Shutting down the server.
+[Fri Apr 05 20:30:50.371689 2024] [mpm_winnt:notice] [pid 19072:tid 412] AH00364: Child: All worker threads have exited.
+[Fri Apr 05 20:30:50.390699 2024] [mpm_winnt:notice] [pid 13704:tid 352] AH00430: Parent: Child process 19072 exited successfully.
