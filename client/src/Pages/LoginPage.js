@@ -12,7 +12,7 @@ const LoginPage = ({ onToggleForm }) => {
     event.preventDefault();
     const form = document.querySelector('.auth-form');
     try {
-      const repsponse = await fetch("http://localhost:80/login.php", {
+      const repsponse = await fetch("", { // php скрипт на сервере
         method: "POST",
         body: new FormData(form)
       });
@@ -29,7 +29,7 @@ const LoginPage = ({ onToggleForm }) => {
 
   return (
     <form 
-      action="http://localhost:80/login.php"
+      action="" // php скрипт на сервере
       method="post"
       onSubmit={handleSubmit}
       className="auth-form"
