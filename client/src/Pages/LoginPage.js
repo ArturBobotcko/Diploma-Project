@@ -7,14 +7,15 @@ const LoginPage = ({ onToggleForm }) => {
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
-  
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const form = document.querySelector('.auth-form');
+    const form = document.querySelector(".auth-form");
     try {
-      const repsponse = await fetch("", { // php скрипт на сервере
+      const repsponse = await fetch("", {
+        // php скрипт на сервере
         method: "POST",
-        body: new FormData(form)
+        body: new FormData(form),
       });
 
       if (repsponse.ok) {
@@ -28,7 +29,7 @@ const LoginPage = ({ onToggleForm }) => {
   };
 
   return (
-    <form 
+    <form
       action="" // php скрипт на сервере
       method="post"
       onSubmit={handleSubmit}
@@ -43,12 +44,13 @@ const LoginPage = ({ onToggleForm }) => {
         Авторизация
       </Typography>
       <TextField
-        name="login"
+        name="email"
+        type="email"
         fullWidth={true}
         margin="normal"
-        label="Логин"
+        label="Email"
         variant="outlined"
-        placeholder="Введите ваш логин"
+        placeholder="Введите адрес вашей электронной почты"
       />
       <TextField
         name="password"
