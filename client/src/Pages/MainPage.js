@@ -37,7 +37,8 @@ const IntroText = styled(Typography)({
 });
 
 const IntroButton = styled(Button)({
-  maxWidth: "100px",
+  maxWidth: "110px",
+  height: "45px"
 });
 
 const MainPage = () => {
@@ -127,6 +128,8 @@ const MainPage = () => {
           </IntroSection>
         </IntroSectionContainer>
         <Footer />
+        {/* TODO: Make modal window with registration and authorization
+          * PS: Make registration form as a page (or mb leave it modal) */}
       </MainContainer>
     </AppContainer>
   );
