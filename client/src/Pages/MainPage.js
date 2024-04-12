@@ -2,11 +2,10 @@ import React, { useEffect, useState } from "react";
 import "../App.css";
 import Footer from "../Components/Footer";
 import Navbar from "../Components/Navbar";
-import ModalLogin from "../Components/ModalLogin";
-import RegisterModal from "../Components/RegisterModal";
 import { useNavigate } from "react-router-dom";
-import { Button, Typography } from "@mui/material";
+import { Button, Typography, Modal, Box } from "@mui/material";
 import { styled } from "@mui/system";
+import LoginPage from "./LoginPage";
 
 const AppContainer = styled("div")({
   display: "flex",
@@ -38,73 +37,29 @@ const IntroText = styled(Typography)({
 
 const IntroButton = styled(Button)({
   maxWidth: "110px",
-  height: "45px"
+  height: "45px",
+});
+
+const StyledBoxForModal = styled(Box)({
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  backgroundColor: "white",
+  boxShadow: 24,
+  padding: 30,
+  borderRadius: 10,
 });
 
 const MainPage = () => {
   const navigate = useNavigate();
 
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [isLoginForm, setLoginForm] = useState(true);
-
-  useEffect(() => {
-    if (isModalOpen) {
-      navigate(isLoginForm ? "/login" : "/register", { replace: true });
-    } else {
-      navigate("/", { replace: true });
-    }
-  }, [isModalOpen, isLoginForm]);
-
-  function authorize() {
-    setModalOpen(true);
-    setLoginForm(true);
-  }
-
-  function closeModal() {
-    setModalOpen(false);
-  }
-
-  function toggleForm() {
-    setLoginForm((prev) => !prev);
-  }
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   return (
-    // <div className="app-container">
-    //   <div className="main-container">
-    //     <Navbar />
-    //     <div className="intro-section-container">
-    //       <Typography variant="h1">
-    //         Цифровая
-    //         <br />
-    //         образовательная платформа
-    //         <br />
-    //         «Название»
-    //       </Typography>
-    //       {/* <p>
-    //         Откройте дверь в мир музыки с нашим электронным дневником.
-    //         <br />
-    //         Присоединяйтесь прямо сейчас!
-    //       </p> */}
-    //       <Typography variant="subtitle1">
-    //         Откройте дверь в мир музыки с нашим электронным дневником.
-    //         <br />
-    //         Присоединяйтесь прямо сейчас!
-    //       </Typography>
-    //       <div className="intro-buttons-container">
-    //         {/* <Button color="button-primary" label="Войти" onClick={authorize} /> */}
-    //         <Button variant="outlined" size="large" onClick={authorize}>Войти</Button>
-    //       </div>
-    //     </div>
-    //     {isModalOpen &&
-    //       (isLoginForm ? (
-    //         <ModalLogin onToggleForm={toggleForm} onClose={closeModal} />
-    //       ) : (
-    //         <RegisterModal onToggleForm={toggleForm} onClose={closeModal} />
-    //       ))
-    //     }
-    //   </div>
-    //   <Footer />
-    // </div>
     <AppContainer>
       <MainContainer>
         <Navbar />
@@ -122,14 +77,19 @@ const MainPage = () => {
               <br />
               Присоединяйтесь прямо сейчас!
             </IntroText>
-            <IntroButton variant="contained" size="large">
+            <IntroButton variant="contained" size="large" onClick={handleOpen}>
               Войти
             </IntroButton>
           </IntroSection>
         </IntroSectionContainer>
         <Footer />
+        <Modal open={open} onClose={handleClose}>
+          <StyledBoxForModal>
+            <LoginPage />
+          </StyledBoxForModal>
+        </Modal>
         {/* TODO: Make modal window with registration and authorization
-          * PS: Make registration form as a page (or mb leave it modal) */}
+         * PS: Make registration form as a page (or mb leave it modal) */}
       </MainContainer>
     </AppContainer>
   );

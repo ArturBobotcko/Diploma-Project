@@ -1,10 +1,22 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { TextField, Button, Typography } from "@mui/material";
+import { useNavigate, Link as RouterLink } from "react-router-dom";
+import {
+  TextField,
+  Button,
+  Typography,
+  IconButton,
+  InputAdornment,
+  Link,
+  Container,
+  FormControlLabel,
+  Checkbox,
+} from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const LoginPage = ({ onToggleForm }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
 
@@ -28,17 +40,21 @@ const LoginPage = ({ onToggleForm }) => {
     }
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
+
   return (
     <form
       action="" // php скрипт на сервере
       method="post"
       onSubmit={handleSubmit}
-      className="auth-form"
+      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
     >
       <Typography
-        variant="h1"
+        variant="h2"
         fontSize={30}
-        color={"rgba(0, 0, 0, 0.6)"}
+        color={"#696b6e"}
         textAlign="center"
       >
         Авторизация
@@ -58,14 +74,55 @@ const LoginPage = ({ onToggleForm }) => {
         margin="normal"
         label="Пароль"
         variant="outlined"
-        type="password"
+        type={showPassword ? "text" : "password"}
         placeholder="Введите ваш пароль"
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton onClick={togglePasswordVisibility} edge="end">
+                {showPassword ? <Visibility /> : <VisibilityOff />}
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
       />
+      <Container
+        sx={{
+          padding: 0,
+          "@media (min-width: 600px)": {
+            padding: "0",
+          },
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+        }}
+      >
+        <FormControlLabel
+          control={<Checkbox />}
+          label="Запомнить меня"
+          sx={{
+            "& .MuiTypography-root": {
+              fontFamily: '"News Cycle", sans-serif',
+              color: "#696b6e"
+            },
+          }}
+        />
+        <Link
+          component={RouterLink}
+          to="/forgot-password"
+          underline="hover"
+          sx={{ alignSelf: "center", paddingBottom: "5px" }}
+        >
+          Забыли пароль?
+        </Link>
+      </Container>
       <Button
         sx={{
-          marginTop: 2,
-          marginBottom: 2,
-          width: "40%",
+          marginTop: 1,
+          marginBottom: 1,
+          width: "100%",
+          alignSelf: "center",
+          justifySelf: "center",
         }}
         variant="contained"
         onClick={handleSubmit}
@@ -75,13 +132,16 @@ const LoginPage = ({ onToggleForm }) => {
       </Button>
       <Typography
         variant="body1"
-        color={"rgba(0, 0, 0, 0.6)"}
+        color={"#696b6e"}
         textAlign="center"
+        sx={{
+          font: "inherit",
+        }}
       >
-        У вас нет аккаунта?
-        <span className="register-btn" onClick={onToggleForm}>
+        У вас нет аккаунта?{" "}
+        <Link component={RouterLink} to="/register" underline="hover">
           Регистрация
-        </span>
+        </Link>
       </Typography>
     </form>
   );
