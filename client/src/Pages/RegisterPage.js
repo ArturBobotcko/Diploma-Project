@@ -70,8 +70,6 @@ const RegisterPage = ({ onToggleForm }) => {
     setNameError(false);
     setPasswordError(false);
     setConfirmPasswordError(false);
-
-    let user = { email, surname, name, patronym, role, password };
   };
 
   return (
