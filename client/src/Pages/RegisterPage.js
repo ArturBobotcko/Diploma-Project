@@ -75,7 +75,7 @@ const RegisterPage = ({ onToggleForm }) => {
   };
 
   return (
-    <>
+    <div style={{backgroundColor: "#f3f4f6", minHeight: "100vh"}}>
       <Navbar />
       <Container
         sx={{
@@ -260,7 +260,7 @@ const RegisterPage = ({ onToggleForm }) => {
           </Typography>
         </form>
       </Container>
-    </>
+    </div>
   );
 };
 

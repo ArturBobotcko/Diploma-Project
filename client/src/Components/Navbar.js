@@ -38,7 +38,7 @@ const StyledToolbar = styled(Toolbar)({
 
 const Navbar = () => {
   return (
-    <AppBar position="" elevation={3}>
+    <AppBar position="" elevation={2}>
       <StyledToolbar>
         <NavbarContainer>
           <div className="nav-logo-container">

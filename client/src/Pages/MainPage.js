@@ -12,6 +12,7 @@ const AppContainer = styled("div")({
   flexDirection: "column",
   minHeight: "100vh",
   color: "#696b6e",
+  backgroundColor: "#f3f4f6"
 });
 
 const MainContainer = styled("div")({
