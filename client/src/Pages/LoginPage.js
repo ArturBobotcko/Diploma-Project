@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
-const LoginPage = ({ onToggleForm }) => {
+const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -56,6 +56,7 @@ const LoginPage = ({ onToggleForm }) => {
         fontSize={30}
         color={"#696b6e"}
         textAlign="center"
+        fontFamily="inherit"
       >
         Авторизация
       </Typography>
@@ -103,7 +104,7 @@ const LoginPage = ({ onToggleForm }) => {
           sx={{
             "& .MuiTypography-root": {
               fontFamily: '"News Cycle", sans-serif',
-              color: "#696b6e"
+              color: "#696b6e",
             },
           }}
         />
@@ -121,6 +122,7 @@ const LoginPage = ({ onToggleForm }) => {
           marginTop: 1,
           marginBottom: 1,
           width: "100%",
+          maxWidth: "220px",
           alignSelf: "center",
           justifySelf: "center",
         }}

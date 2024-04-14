@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../App.css";
 import Footer from "../Components/Footer";
 import Navbar from "../Components/Navbar";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button, Typography, Modal, Box } from "@mui/material";
 import { styled } from "@mui/system";
 import LoginPage from "./LoginPage";
@@ -29,6 +29,7 @@ const IntroSectionContainer = styled("div")({
 const IntroSection = styled("div")({
   display: "flex",
   flexDirection: "column",
+  marginTop: "140px",
 });
 
 const IntroText = styled(Typography)({
@@ -45,7 +46,7 @@ const StyledBoxForModal = styled(Box)({
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: "552px",
   backgroundColor: "white",
   boxShadow: 24,
   padding: 30,
@@ -54,10 +55,22 @@ const StyledBoxForModal = styled(Box)({
 
 const MainPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [open, setOpen] = useState(location.pathname === "/login");
 
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  useEffect(() => {
+    setOpen(location.pathname === "/login");
+  }, [location.pathname]);
+
+  const handleOpen = () => {
+    setOpen(true);
+    navigate("/login");
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    navigate("/");
+  };
 
   return (
     <AppContainer>
@@ -88,8 +101,6 @@ const MainPage = () => {
             <LoginPage />
           </StyledBoxForModal>
         </Modal>
-        {/* TODO: Make modal window with registration and authorization
-         * PS: Make registration form as a page (or mb leave it modal) */}
       </MainContainer>
     </AppContainer>
   );
