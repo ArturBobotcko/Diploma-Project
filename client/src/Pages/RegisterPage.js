@@ -21,7 +21,7 @@ const RegisterPage = ({ onToggleForm }) => {
   const [studentClass, setStudentClass] = useState("");
   const [school, setSchool] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [password_confirmation, setConfirmPassword] = useState("");
 
   const [emailError, setEmailError] = useState(false);
   const [surnameError, setSurnameError] = useState(false);
@@ -49,31 +49,84 @@ const RegisterPage = ({ onToggleForm }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (!email || !surname || !name || !role || !password || !confirmPassword) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!email || !surname || !name || !role || !school || !password || !password_confirmation) {
       // Если одно из обязательных полей пустое, устанавливаем соответствующее состояние ошибки
-      setEmailError(!email);
-      setSurnameError(!surname);
-      setNameError(!name);
-      setRoleError(!role);
-      setPasswordError(!password);
-      setConfirmPasswordError(!confirmPassword);
+      // setEmailError(!email);
+      // setSurnameError(!surname);
+      // setNameError(!name);
+      // setRoleError(!role);
+      // setPasswordError(!password);
+      // setConfirmPasswordError(!confirmPassword);
       return; // Останавливаем процесс отправки формы
     }
 
-    if (password !== confirmPassword) {
-      setConfirmPasswordError(true);
+    if (!email || !emailRegex.test(email)) {
+      // setEmailError(true);
       return;
     }
 
-    setEmailError(false);
-    setSurnameError(false);
-    setNameError(false);
-    setPasswordError(false);
-    setConfirmPasswordError(false);
+    if (role === 'student' && !studentClass) {
+      // setStudentClass(!studentClass);
+      return;
+    }
+
+    if (password.length < 8) {
+      // setPasswordError(true);
+      return;
+    }
+
+    if (password !== password_confirmation) {
+      // setConfirmPasswordError(true);
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:8000/api/register", {
+        method: "POST",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          "email":email,
+          "surname":surname,
+          "name":name,
+          "patronym":patronym,
+          "role":role,
+          "class":studentClass,
+          "school":school,
+          "password":password,
+          "password_confirmation":password_confirmation,
+        }),
+      });
+
+      if (!response.ok) {
+        console.log(response);
+        throw new Error("Ошибка HTPP: " + response.status);
+        
+      }
+
+      setEmail("");
+      setSurname("");
+      setName("");
+      setPatronym("");
+      setRole("");
+      setStudentClass("");
+      setSchool("");
+      setPassword("");
+      setConfirmPassword("");
+
+      const responseData = await response.json();
+      console.log(responseData); // Выводим ответ сервера в консоль
+    } catch (error) {
+      console.error("Ошибка при отправке запроса:", error);
+    }
   };
 
   return (
-    <div style={{backgroundColor: "#f3f4f6", minHeight: "100vh"}}>
+    <div style={{ backgroundColor: "#f3f4f6", minHeight: "100vh" }}>
       <Navbar />
       <Container
         sx={{
@@ -88,7 +141,7 @@ const RegisterPage = ({ onToggleForm }) => {
         }}
       >
         <form
-          action="" // php скрипт на сервере
+          // action="http://localhost:8000/api/register"
           method="post"
           onSubmit={handleSubmit}
           style={{
@@ -177,6 +230,18 @@ const RegisterPage = ({ onToggleForm }) => {
               </MenuItem>
             ))}
           </TextField>
+          <TextField
+            name="school"
+            type="text"
+            value={school}
+            onChange={(e) => setSchool(e.target.value)}
+            fullWidth={true}
+            margin="normal"
+            label="Школа"
+            variant="outlined"
+            placeholder="Введите название вашей школы"
+            required
+          />
           {selectedRole === "student" && (
             <>
               <TextField
@@ -189,18 +254,6 @@ const RegisterPage = ({ onToggleForm }) => {
                 label="Класс"
                 variant="outlined"
                 placeholder="Введите ваш класс"
-                required
-              />
-              <TextField
-                name="school"
-                type="text"
-                value={school}
-                onChange={(e) => setSchool(e.target.value)}
-                fullWidth={true}
-                margin="normal"
-                label="Школа"
-                variant="outlined"
-                placeholder="Введите название вашей школы"
                 required
               />
             </>
@@ -221,7 +274,7 @@ const RegisterPage = ({ onToggleForm }) => {
           <TextField
             name="confirmPassword"
             type="password"
-            value={confirmPassword}
+            value={password_confirmation}
             onChange={(e) => setConfirmPassword(e.target.value)}
             fullWidth={true}
             margin="normal"

@@ -22,6 +22,7 @@ class User extends Authenticatable
         'patronym',
         'role',
         'school',
+        'class',
         'password',
     ];
 
