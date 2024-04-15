@@ -3,7 +3,7 @@ import "../App.css";
 import Footer from "../Components/Footer";
 import Navbar from "../Components/Navbar";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Button, Typography, Modal, Box } from "@mui/material";
+import { Button, Typography, Modal, Box, Container } from "@mui/material";
 import { styled } from "@mui/system";
 import LoginPage from "./LoginPage";
 
@@ -12,7 +12,7 @@ const AppContainer = styled("div")({
   flexDirection: "column",
   minHeight: "100vh",
   color: "#696b6e",
-  backgroundColor: "#f3f4f6"
+  backgroundColor: "#f3f4f6",
 });
 
 const MainContainer = styled("div")({
@@ -37,8 +37,13 @@ const IntroText = styled(Typography)({
   marginBottom: "30px",
 });
 
-const IntroButton = styled(Button)({
+const IntroLoginButton = styled(Button)({
   maxWidth: "110px",
+  height: "45px",
+});
+
+const IntroRegisterButton = styled(Button)({
+  // maxWidth: "110px",
   height: "45px",
 });
 
@@ -91,9 +96,33 @@ const MainPage = () => {
               <br />
               Присоединяйтесь прямо сейчас!
             </IntroText>
-            <IntroButton variant="contained" size="large" onClick={handleOpen}>
-              Войти
-            </IntroButton>
+            <Container
+              sx={{
+                "@media (min-width: 600px)": {
+                  padding: 0,
+                },
+              }}
+            >
+              <IntroLoginButton
+                variant="contained"
+                size="large"
+                onClick={handleOpen}
+                sx={{
+                  marginRight: 2,
+                }}
+              >
+                Войти
+              </IntroLoginButton>
+              <IntroRegisterButton
+                variant="outlined"
+                size="large"
+                onClick={() => {
+                  navigate("/register");
+                }}
+              >
+                Регистрация
+              </IntroRegisterButton>
+            </Container>
           </IntroSection>
         </IntroSectionContainer>
         <Footer />

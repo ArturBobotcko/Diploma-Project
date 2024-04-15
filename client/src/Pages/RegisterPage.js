@@ -21,13 +21,15 @@ const RegisterPage = ({ onToggleForm }) => {
   const [studentClass, setStudentClass] = useState("");
   const [school, setSchool] = useState("");
   const [password, setPassword] = useState("");
-  const [password_confirmation, setConfirmPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const [emailError, setEmailError] = useState(false);
   const [surnameError, setSurnameError] = useState(false);
   const [nameError, setNameError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [roleError, setRoleError] = useState(false);
+  const [schoolError, setSchoolError] = useState(false);
+  const [studentClassError, setStudentClassError] = useState(false);
   const [confirmPasswordError, setConfirmPasswordError] = useState(false);
 
   const roles = [
@@ -49,36 +51,42 @@ const RegisterPage = ({ onToggleForm }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    setEmailError(false);
+    setSurnameError(false);
+    setNameError(false);
+    setRoleError(false);
+    setSchoolError(false);
+    setPasswordError(false);
+    setStudentClassError(false);
+    setConfirmPasswordError(false);
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (!email || !surname || !name || !role || !school || !password || !password_confirmation) {
+    if (!email || !surname || !name || !role || !school || !password || !confirmPassword || (role === 'student' && !studentClass)) {
       // Если одно из обязательных полей пустое, устанавливаем соответствующее состояние ошибки
-      // setEmailError(!email);
-      // setSurnameError(!surname);
-      // setNameError(!name);
-      // setRoleError(!role);
-      // setPasswordError(!password);
-      // setConfirmPasswordError(!confirmPassword);
+      setEmailError(!email);
+      setSurnameError(!surname);
+      setNameError(!name);
+      setRoleError(!role);
+      setSchoolError(!school);
+      setPasswordError(!password);
+      setStudentClassError(!studentClass);
+      setConfirmPasswordError(!confirmPassword);
       return; // Останавливаем процесс отправки формы
     }
 
     if (!email || !emailRegex.test(email)) {
-      // setEmailError(true);
-      return;
-    }
-
-    if (role === 'student' && !studentClass) {
-      // setStudentClass(!studentClass);
+      setEmailError(true);
       return;
     }
 
     if (password.length < 8) {
-      // setPasswordError(true);
+      setPasswordError(true);
       return;
     }
 
-    if (password !== password_confirmation) {
-      // setConfirmPasswordError(true);
+    if (password !== confirmPassword) {
+      setConfirmPasswordError(true);
       return;
     }
 
@@ -98,7 +106,7 @@ const RegisterPage = ({ onToggleForm }) => {
           "class":studentClass,
           "school":school,
           "password":password,
-          "password_confirmation":password_confirmation,
+          "password_confirmation":confirmPassword,
         }),
       });
 
@@ -241,6 +249,7 @@ const RegisterPage = ({ onToggleForm }) => {
             variant="outlined"
             placeholder="Введите название вашей школы"
             required
+            error={schoolError}
           />
           {selectedRole === "student" && (
             <>
@@ -255,6 +264,7 @@ const RegisterPage = ({ onToggleForm }) => {
                 variant="outlined"
                 placeholder="Введите ваш класс"
                 required
+                error={studentClassError}
               />
             </>
           )}
@@ -274,7 +284,7 @@ const RegisterPage = ({ onToggleForm }) => {
           <TextField
             name="confirmPassword"
             type="password"
-            value={password_confirmation}
+            value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             fullWidth={true}
             margin="normal"
@@ -288,7 +298,9 @@ const RegisterPage = ({ onToggleForm }) => {
             sx={{
               marginTop: 2,
               marginBottom: 2,
-              width: "40%",
+              // width: "40%",
+              height: "45px",
+              fontSize: "15px",
               alignSelf: "center",
               justifySelf: "center",
             }}
