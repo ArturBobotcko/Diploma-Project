@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
-import Navbar from "../Components/Navbar";
+import NavbarComponent from "../Components/NavbarComponent";
 import {
   TextField,
   Button,
@@ -135,7 +135,7 @@ const RegisterPage = ({ onToggleForm }) => {
 
   return (
     <div style={{ backgroundColor: "#f3f4f6", minHeight: "100vh" }}>
-      <Navbar />
+      <NavbarComponent />
       <Container
         sx={{
           display: "flex",

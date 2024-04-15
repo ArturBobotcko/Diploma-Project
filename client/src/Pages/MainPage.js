@@ -1,63 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "../App.css";
 import Footer from "../Components/Footer";
-import Navbar from "../Components/Navbar";
+import Navbar from "../Components/NavbarComponent";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Button, Typography, Modal, Box, Container } from "@mui/material";
-import { styled } from "@mui/system";
 import LoginPage from "./LoginPage";
-
-const AppContainer = styled("div")({
-  display: "flex",
-  flexDirection: "column",
-  minHeight: "100vh",
-  color: "#696b6e",
-  backgroundColor: "#f3f4f6",
-});
-
-const MainContainer = styled("div")({
-  color: "#696b6e",
-  flex: "1",
-});
-
-const IntroSectionContainer = styled("div")({
-  display: "flex",
-  marginLeft: "10%",
-  marginRight: "10%",
-  justifyContent: "space-between",
-});
-
-const IntroSection = styled("div")({
-  display: "flex",
-  flexDirection: "column",
-  marginTop: "140px",
-});
-
-const IntroText = styled(Typography)({
-  marginBottom: "30px",
-});
-
-const IntroLoginButton = styled(Button)({
-  maxWidth: "110px",
-  height: "45px",
-});
-
-const IntroRegisterButton = styled(Button)({
-  // maxWidth: "110px",
-  height: "45px",
-});
-
-const StyledBoxForModal = styled(Box)({
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: "552px",
-  backgroundColor: "white",
-  boxShadow: 24,
-  padding: 30,
-  borderRadius: 10,
-});
+import { Button, Col, Container, Row } from "react-bootstrap";
+import NavbarComponent from "../Components/NavbarComponent";
 
 const MainPage = () => {
   const navigate = useNavigate();
@@ -67,6 +15,17 @@ const MainPage = () => {
   useEffect(() => {
     setOpen(location.pathname === "/login");
   }, [location.pathname]);
+
+  useEffect(() => {
+    const loginModal = document.getElementById('loginModal');
+    const handleModalHidden = (event) => {
+      handleClose();
+    };
+    loginModal.addEventListener('hidden.bs.modal', handleModalHidden);
+    return () => {
+      loginModal.removeEventListener('hidden.bs.modal', handleModalHidden);
+    };
+  }, []);
 
   const handleOpen = () => {
     setOpen(true);
@@ -79,60 +38,52 @@ const MainPage = () => {
   };
 
   return (
-    <AppContainer>
-      <MainContainer>
-        <Navbar />
-        <IntroSectionContainer>
-          <IntroSection>
-            <IntroText variant="h1" sx={{ fontSize: "40px" }}>
-              Цифровая
-              <br />
-              образовательная платформа
-              <br />
-              «Название»
-            </IntroText>
-            <IntroText variant="subtitle1" sx={{ fontSize: "20px" }}>
-              Откройте дверь в мир музыки с нашим электронным дневником.
-              <br />
-              Присоединяйтесь прямо сейчас!
-            </IntroText>
-            <Container
-              sx={{
-                "@media (min-width: 600px)": {
-                  padding: 0,
-                },
-              }}
-            >
-              <IntroLoginButton
-                variant="contained"
-                size="large"
-                onClick={handleOpen}
-                sx={{
-                  marginRight: 2,
-                }}
-              >
-                Войти
-              </IntroLoginButton>
-              <IntroRegisterButton
-                variant="outlined"
-                size="large"
-                onClick={() => {
-                  navigate("/register");
-                }}
-              >
-                Регистрация
-              </IntroRegisterButton>
-            </Container>
-          </IntroSection>
-        </IntroSectionContainer>
-        <Footer />
-        <Modal open={open} onClose={handleClose}>
-          <StyledBoxForModal>
-            <LoginPage />
-          </StyledBoxForModal>
-        </Modal>
-      </MainContainer>
-    </AppContainer>
+    <div className="container-fluid p-0 d-flex flex-column min-vh-100">
+      <NavbarComponent />
+      <div className="container-fluid bg-white text-secondary" style={{ marginTop: "140px", marginBottom: "140px", flex: "1 0 auto" }}>
+        <div className="container d-flex flex-column gap-3">
+          <h1 className="display-6">
+            Цифровая
+            <br />
+            образовательная платформа
+            <br />
+            «Название»
+          </h1>
+          <p className="fs-5">
+            Откройте дверь в мир музыки с нашим электронным дневником.
+            <br />
+            Присоединяйтесь прямо сейчас!
+          </p>
+          <div class="d-flex gap-3">
+            <button type="button" className="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#loginModal" onClick={handleOpen}>
+              Войти
+            </button>
+            <button type="button" className="btn btn-primary btn-lg" onClick={() => navigate("/register")}>
+              Регистрация
+            </button>
+          </div>
+          <div className="modal fade" id="loginModal" aria-labelledby="loginModalLabel" aria-hidden="true">
+            <div className="modal-dialog modal-dialog-centered modal-fullscreen-md-down">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title" id="loginModalLabel">
+                    Авторизация
+                  </h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div className="modal-body">Форма авторизации</div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary">
+                    Войти
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <Footer />
+    </div>
   );
 };
 
