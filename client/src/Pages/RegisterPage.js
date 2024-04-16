@@ -1,14 +1,6 @@
 import React, { useState } from "react";
-import { Link as RouterLink } from "react-router-dom";
 import NavbarComponent from "../Components/NavbarComponent";
-import {
-  TextField,
-  Button,
-  Typography,
-  MenuItem,
-  Container,
-  Link,
-} from "@mui/material";
+import Footer from "../Components/Footer";
 
 const RegisterPage = ({ onToggleForm }) => {
   const [selectedRole, setSelectedRole] = useState("");
@@ -113,7 +105,6 @@ const RegisterPage = ({ onToggleForm }) => {
       if (!response.ok) {
         console.log(response);
         throw new Error("Ошибка HTPP: " + response.status);
-        
       }
 
       setEmail("");
@@ -134,195 +125,64 @@ const RegisterPage = ({ onToggleForm }) => {
   };
 
   return (
-    <div style={{ backgroundColor: "#f3f4f6", minHeight: "100vh" }}>
+    <div className="container-fluid p-0 d-flex flex-column min-vh-100">
       <NavbarComponent />
-      <Container
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          marginTop: "140px",
-          maxWidth: "600px",
-          "@media (min-width: 1200px)": {
-            maxWidth: "600px",
-          },
-        }}
-      >
-        <form
-          // action="http://localhost:8000/api/register"
-          method="post"
-          onSubmit={handleSubmit}
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            width: "100%",
-          }}
-        >
-          <Typography
-            variant="h2"
-            fontSize={30}
-            color={"#696b6e"}
-            textAlign="center"
-            fontFamily="inherit"
-          >
-            Регистрация
-          </Typography>
-          <TextField
-            name="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            fullWidth={true}
-            margin="normal"
-            label="Email"
-            variant="outlined"
-            placeholder="Введите адрес вашей электронной почты"
-            required
-            error={emailError}
-          />
-          <TextField
-            name="surname"
-            type="text"
-            value={surname}
-            onChange={(e) => setSurname(e.target.value)}
-            fullWidth={true}
-            margin="normal"
-            label="Фамилия"
-            variant="outlined"
-            placeholder="Введите вашу фамилию"
-            required
-            error={surnameError}
-          />
-          <TextField
-            name="name"
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            fullWidth={true}
-            margin="normal"
-            label="Имя"
-            variant="outlined"
-            placeholder="Введите ваше имя"
-            required
-            error={nameError}
-          />
-          <TextField
-            name="patronym"
-            type="text"
-            value={patronym}
-            onChange={(e) => setPatronym(e.target.value)}
-            fullWidth={true}
-            margin="normal"
-            label="Отчество"
-            variant="outlined"
-            placeholder="Введите ваше отчество (необязательно)"
-          />
-          <TextField
-            name="role"
-            type=""
-            value={role}
-            onChange={handleRoleChange}
-            fullWidth={true}
-            margin="normal"
-            label="Роль"
-            variant="outlined"
-            select
-            helperText="Выберите вашу роль"
-            required
-            error={roleError}
-          >
-            {roles.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </TextField>
-          <TextField
-            name="school"
-            type="text"
-            value={school}
-            onChange={(e) => setSchool(e.target.value)}
-            fullWidth={true}
-            margin="normal"
-            label="Школа"
-            variant="outlined"
-            placeholder="Введите название вашей школы"
-            required
-            error={schoolError}
-          />
-          {selectedRole === "student" && (
-            <>
-              <TextField
-                name="class"
-                type="text"
-                value={studentClass}
-                onChange={(e) => setStudentClass(e.target.value)}
-                fullWidth={true}
-                margin="normal"
-                label="Класс"
-                variant="outlined"
-                placeholder="Введите ваш класс"
-                required
-                error={studentClassError}
-              />
-            </>
-          )}
-          <TextField
-            name="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            fullWidth={true}
-            margin="normal"
-            label="Пароль"
-            variant="outlined"
-            placeholder="Введите ваш пароль"
-            required
-            error={passwordError}
-          />
-          <TextField
-            name="confirmPassword"
-            type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            fullWidth={true}
-            margin="normal"
-            label="Подтвердите пароль"
-            variant="outlined"
-            placeholder="Подтвердите ваш пароль"
-            required
-            error={confirmPasswordError}
-          />
-          <Button
-            sx={{
-              marginTop: 2,
-              marginBottom: 2,
-              // width: "40%",
-              height: "45px",
-              fontSize: "15px",
-              alignSelf: "center",
-              justifySelf: "center",
-            }}
-            variant="contained"
-            onClick={handleSubmit}
-            type="submit"
-          >
-            Регистрация
-          </Button>
-          <Typography
-            variant="body1"
-            color={"#696b6e"}
-            textAlign="center"
-            fontFamily="inherit"
-          >
-            У вас есть аккаунт?{" "}
-            <Link component={RouterLink} to="/login" underline="hover">
-              Войти
-            </Link>
-          </Typography>
-        </form>
-      </Container>
+      <div className="container-fluid bg-white text-secondary my-5" style={{ flex: "1 0 auto" }}>
+        <div className="container d-flex flex-column">
+          <h5 className="text-center">Регистрация</h5>
+          <form className="d-flex flex-column col-sm-12 mx-sm-0 col-md-6 mx-md-auto" onSubmit={handleSubmit}>
+            <div className="form-group mb-3 text-start">
+              <label className="mb-1">Email</label>
+              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="form-control" placeholder="Введите ваш адрес электронной почты"></input>
+            </div>
+            <div className="form-group mb-3 text-start">
+              <label className="mb-1">Фамилия</label>
+              <input type="text" value={surname} onChange={(e) => setSurname(e.target.value)} className="form-control"></input>
+            </div>
+            <div className="form-group mb-3 text-start">
+              <label className="mb-1">Имя</label>
+              <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="form-control"></input>
+            </div>
+            <div className="form-group mb-3 text-start">
+              <label className="mb-1">Отчество (необязательно)</label>
+              <input type="text" value={patronym} onChange={(e) => setPatronym(e.target.value)} className="form-control"></input>
+            </div>
+            <div className="form-group mb-3 text-start">
+              <label className="mb-1">Роль</label>
+              <select className="form-select" onChange={handleRoleChange}>
+                <option selected value="">Выберите роль</option>
+                {roles.map((role, index) =>(
+                  <option key={index} value={role.value}>{role.label}</option>
+                ))}
+              </select>
+            </div>
+            <div className="form-group mb-3 text-start">
+              <label className="mb-1">Школа</label>
+              <input type="text" value={school} onChange={(e) => setSchool(e.target.value)} className="form-control"></input>
+            </div>
+            {selectedRole === "student" && (
+              <div className="form-group mb-3 text-start">
+                <label className="mb-1">Класс</label>
+                <input type="text" value={studentClass} onChange={(e) => setStudentClass(e.target.value)} className="form-control"></input>
+              </div>
+            )}
+            <div className="form-group mb-3 text-start">
+              <label className="mb-1">Пароль</label>
+              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="form-control" placeholder="Введите ваш пароль"></input>
+            </div>
+            <div className="form-group mb-4 text-start">
+              <label className="mb-1">Подтвердите пароль</label>
+              <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="form-control" placeholder="Подветрдите ваш пароль"></input>
+            </div>
+            <button type="submit" className="btn btn-primary col-sm-6 col-md-3 mb-3 mx-auto">Регистрация</button>
+            <div className="container-fluid p-0 d-flex flex-row justify-content-center">
+              <p className="m-0">У вас уже есть аккаунт?&nbsp;</p>
+              <p className="m-0"><a class="link-opacity-75-hover" href="/">Войти</a></p>
+            </div>
+          </form>
+        </div>
+      </div>
+      <Footer />
     </div>
   );
 };

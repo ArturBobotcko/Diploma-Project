@@ -40,8 +40,8 @@ const MainPage = () => {
   return (
     <div className="container-fluid p-0 d-flex flex-column min-vh-100">
       <NavbarComponent />
-      <div className="container-fluid bg-white text-secondary" style={{ marginTop: "140px", marginBottom: "140px", flex: "1 0 auto" }}>
-        <div className="container d-flex flex-column gap-3">
+      <div className="container-fluid bg-white text-secondary my-5" style={{ flex: "1 0 auto" }}>
+        <div className="container d-flex flex-column gap-3 text-center text-md-start">
           <h1 className="display-6">
             Цифровая
             <br />
@@ -49,16 +49,16 @@ const MainPage = () => {
             <br />
             «Название»
           </h1>
-          <p className="fs-5">
+          <p className="lead">
             Откройте дверь в мир музыки с нашим электронным дневником.
             <br />
             Присоединяйтесь прямо сейчас!
           </p>
-          <div class="d-flex gap-3">
-            <button type="button" className="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#loginModal" onClick={handleOpen}>
+          <div class="d-flex flex-column flex-md-row gap-3 justify-content-center justify-content-md-start">
+            <button type="button" className="btn btn-primary btn-md" data-bs-toggle="modal" data-bs-target="#loginModal" onClick={handleOpen}>
               Войти
             </button>
-            <button type="button" className="btn btn-primary btn-lg" onClick={() => navigate("/register")}>
+            <button type="button" className="btn btn-outline-primary" onClick={() => navigate("/register")}>
               Регистрация
             </button>
           </div>
@@ -71,9 +71,11 @@ const MainPage = () => {
                   </h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div className="modal-body">Форма авторизации</div>
+                <div className="modal-body">
+                  <LoginPage />
+                </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-primary">
+                  <button type="submit" class="btn btn-primary">
                     Войти
                   </button>
                 </div>

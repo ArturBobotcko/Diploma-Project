@@ -1,17 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
-import {
-  TextField,
-  Button,
-  Typography,
-  IconButton,
-  InputAdornment,
-  Link,
-  Container,
-  FormControlLabel,
-  Checkbox,
-} from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
@@ -45,107 +33,25 @@ const LoginPage = () => {
   };
 
   return (
-    <form
-      action="" // php скрипт на сервере
-      method="post"
-      onSubmit={handleSubmit}
-      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-    >
-      <Typography
-        variant="h2"
-        fontSize={30}
-        color={"#696b6e"}
-        textAlign="center"
-        fontFamily="inherit"
-      >
-        Авторизация
-      </Typography>
-      <TextField
-        name="email"
-        type="email"
-        fullWidth={true}
-        margin="normal"
-        label="Email"
-        variant="outlined"
-        placeholder="Введите адрес вашей электронной почты"
-      />
-      <TextField
-        name="password"
-        fullWidth={true}
-        margin="normal"
-        label="Пароль"
-        variant="outlined"
-        type={showPassword ? "text" : "password"}
-        placeholder="Введите ваш пароль"
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton onClick={togglePasswordVisibility} edge="end">
-                {showPassword ? <Visibility /> : <VisibilityOff />}
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
-      />
-      <Container
-        sx={{
-          padding: 0,
-          "@media (min-width: 600px)": {
-            padding: "0",
-          },
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-between",
-        }}
-      >
-        <FormControlLabel
-          control={<Checkbox />}
-          label="Запомнить меня"
-          sx={{
-            "& .MuiTypography-root": {
-              fontFamily: '"News Cycle", sans-serif',
-              color: "#696b6e",
-            },
-          }}
-        />
-        <Link
-          component={RouterLink}
-          to="/forgot-password"
-          underline="hover"
-          sx={{ alignSelf: "center", paddingBottom: "5px" }}
-        >
-          Забыли пароль?
-        </Link>
-      </Container>
-      <Button
-        sx={{
-          marginTop: 1,
-          marginBottom: 1,
-          width: "100%",
-          maxWidth: "220px",
-          alignSelf: "center",
-          justifySelf: "center",
-        }}
-        variant="contained"
-        onClick={handleSubmit}
-        type="submit"
-      >
-        Войти
-      </Button>
-      <Typography
-        variant="body1"
-        color={"#696b6e"}
-        textAlign="center"
-        sx={{
-          font: "inherit",
-        }}
-      >
-        У вас нет аккаунта?{" "}
-        <Link component={RouterLink} to="/register" underline="hover">
-          Регистрация
-        </Link>
-      </Typography>
+    <form>
+      <div className="form-group mb-3 text-start">
+        <label className="mb-1">Email</label>
+        <input type="email" className="form-control" placeholder="Введите ваш адрес электронной почты"></input>
+      </div>
+      <div className="form-group mb-3 text-start">
+        <label className="mb-1">Пароль</label>
+        <input type="password" className="form-control" placeholder="Введите ваш пароль"></input>
+      </div>
+      <div className="container-fluid p-0 d-flex flex-row align-items-center">
+        <div className="form-check text-start me-auto">
+          <input type="checkbox" className="form-check-input">
+          </input>
+          <label className="form-check-label">Запомнить меня</label>
+        </div>
+        <p className="m-0"><a class="link-opacity-75-hover" href="#">Забыли пароль?</a></p>
+      </div>
     </form>
+
   );
 };
 
