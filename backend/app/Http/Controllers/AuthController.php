@@ -16,12 +16,18 @@ class AuthController extends Controller
         try {
             $rules = [
                 'email' => 'required|email|unique:users,email',
-                'surname' => 'required|string',
-                'name' => 'required|string',
-                'patronym' => 'nullable|string',
+                'surname' => 'required|string|regex:/^[^\d]+$/u',
+                'name' => 'required|string|regex:/^[^\d]+$/u',
+                'patronym' => 'nullable|string|regex:/^[^\d]+$/u',
                 'role' => 'required|string',
                 'school' => 'required|string',
-                'password' => 'required|string|confirmed|min:8'
+                'password' => [
+                    'required',
+                    'string',
+                    'confirmed',
+                    'min:8',
+                    'regex:/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d]{8,}$/',
+                ],
             ];
 
             if ($request->input('role') === 'student') {
