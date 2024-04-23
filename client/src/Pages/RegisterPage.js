@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import NavbarComponent from "../Components/NavbarComponent";
 import Footer from "../Components/Footer";
+import axios from "axios";
 
 const RegisterPage = ({ onToggleForm }) => {
   const [selectedRole, setSelectedRole] = useState("");
@@ -31,9 +32,39 @@ const RegisterPage = ({ onToggleForm }) => {
     setRole(event.target.value); // Обновляем также значение поля роли
   };
 
+  const clearFields = () => {
+    setEmail("");
+    setSurname("");
+    setName("");
+    setPatronym("");
+    setRole("");
+    setStudentClass("");
+    setSchool("");
+    setPassword("");
+    setConfirmPassword("");
+  }
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     
+    try {
+      const url = "http://localhost:8000/api/register";
+      const response = await axios.post(url, {
+        "email": email,
+        "surname": surname,
+        "name": name,
+        "patronym": patronym,
+        "role": role,
+        "student_class": studentClass,
+        "school": school,
+        "password": password,
+        "password_confirmation": confirmPassword
+      });
+      console.log(response.data);
+      clearFields();
+    } catch (error) {
+      console.error("Registration error:", error);
+    }
   };
 
   return (
