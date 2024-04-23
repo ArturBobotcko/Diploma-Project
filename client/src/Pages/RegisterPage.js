@@ -15,15 +15,6 @@ const RegisterPage = ({ onToggleForm }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const [emailError, setEmailError] = useState(false);
-  const [surnameError, setSurnameError] = useState(false);
-  const [nameError, setNameError] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
-  const [roleError, setRoleError] = useState(false);
-  const [schoolError, setSchoolError] = useState(false);
-  const [studentClassError, setStudentClassError] = useState(false);
-  const [confirmPasswordError, setConfirmPasswordError] = useState(false);
-
   const roles = [
     {
       value: "teacher",
@@ -42,86 +33,7 @@ const RegisterPage = ({ onToggleForm }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    setEmailError(false);
-    setSurnameError(false);
-    setNameError(false);
-    setRoleError(false);
-    setSchoolError(false);
-    setPasswordError(false);
-    setStudentClassError(false);
-    setConfirmPasswordError(false);
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!email || !surname || !name || !role || !school || !password || !confirmPassword || (role === 'student' && !studentClass)) {
-      // Если одно из обязательных полей пустое, устанавливаем соответствующее состояние ошибки
-      setEmailError(!email);
-      setSurnameError(!surname);
-      setNameError(!name);
-      setRoleError(!role);
-      setSchoolError(!school);
-      setPasswordError(!password);
-      setStudentClassError(!studentClass);
-      setConfirmPasswordError(!confirmPassword);
-      return; // Останавливаем процесс отправки формы
-    }
-
-    if (!email || !emailRegex.test(email)) {
-      setEmailError(true);
-      return;
-    }
-
-    if (password.length < 8) {
-      setPasswordError(true);
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      setConfirmPasswordError(true);
-      return;
-    }
-
-    try {
-      const response = await fetch("http://localhost:8000/api/register", {
-        method: "POST",
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          "email":email,
-          "surname":surname,
-          "name":name,
-          "patronym":patronym,
-          "role":role,
-          "class":studentClass,
-          "school":school,
-          "password":password,
-          "password_confirmation":confirmPassword,
-        }),
-      });
-
-      if (!response.ok) {
-        console.log(response);
-        throw new Error("Ошибка HTPP: " + response.status);
-      }
-
-      setEmail("");
-      setSurname("");
-      setName("");
-      setPatronym("");
-      setRole("");
-      setStudentClass("");
-      setSchool("");
-      setPassword("");
-      setConfirmPassword("");
-
-      const responseData = await response.json();
-      console.log(responseData); // Выводим ответ сервера в консоль
-    } catch (error) {
-      console.error("Ошибка при отправке запроса:", error);
-    }
+    
   };
 
   return (

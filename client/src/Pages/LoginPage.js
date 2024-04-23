@@ -10,26 +10,7 @@ const LoginPage = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const form = document.querySelector(".auth-form");
-    try {
-      const repsponse = await fetch("", {
-        // php скрипт на сервере
-        method: "POST",
-        body: new FormData(form),
-      });
-
-      if (repsponse.ok) {
-        navigate("/another-page"); // Перейти на главную страницу сайта после логина
-      } else {
-        // Обработка ошибки
-      }
-    } catch (error) {
-      console.error("Ошибка при отправке запроса: ", error);
-    }
-  };
-
-  const togglePasswordVisibility = () => {
-    setShowPassword((prev) => !prev);
+    
   };
 
   return (
