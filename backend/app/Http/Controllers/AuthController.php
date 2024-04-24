@@ -87,7 +87,10 @@ class AuthController extends Controller
             if (!Auth::attempt($request->only(['email', 'password']))) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Email or password does not match with our record'
+                    'message' => 'Email or password does not match with our record',
+                    'errors' => [
+                        'email' => ['Неверная почта и/или пароль. Проверьте правильность введенных данных']
+                    ]
                 ], 401);
             }
 

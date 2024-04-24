@@ -55,7 +55,7 @@ const MainPage = () => {
             Присоединяйтесь прямо сейчас!
           </p>
           <div class="d-flex flex-column flex-md-row gap-3 justify-content-center justify-content-md-start">
-            <button type="button" className="btn btn-primary btn-md" data-bs-toggle="modal" data-bs-target="#loginModal" onClick={handleOpen}>
+            <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#loginModal" onClick={handleOpen}>
               Войти
             </button>
             <button type="button" className="btn btn-outline-primary" onClick={() => navigate("/register")}>
@@ -73,11 +73,6 @@ const MainPage = () => {
                 </div>
                 <div className="modal-body">
                   <LoginPage />
-                </div>
-                <div class="modal-footer">
-                  <button type="submit" class="btn btn-primary">
-                    Войти
-                  </button>
                 </div>
               </div>
             </div>
