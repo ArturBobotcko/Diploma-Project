@@ -105,4 +105,25 @@ class AuthController extends Controller
             ], 500);
         }
     }
+
+    public function profile()
+    {
+        $userData = auth()->user();
+        return response()->json([
+            'status' => true,
+            'message' => 'Profile information',
+            'data' => $userData,
+            'id' => auth()->user()->id
+        ], 200);
+    }
+
+    public function logout()
+    {
+        auth()->user()->tokens()->delete();
+        return response()->json([
+            'status' => true,
+            'message' => 'User logged out',
+            'data' => [],
+        ], 200);
+    }
 }
