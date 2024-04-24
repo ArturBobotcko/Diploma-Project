@@ -65,4 +65,44 @@ class AuthController extends Controller
             ], 500);
         }
     }
+
+    public function login(Request $request)
+    {
+        try {
+            $rules = [
+                'email' => 'required|email',
+                'password' => 'required',
+            ];
+
+            $validateUser = Validator::make($request->all(), $rules);
+
+            if ($validateUser->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'validation error',
+                    'errors' => $validateUser->errors()
+                ], 401);
+            };
+
+            if (!Auth::attempt($request->only(['email', 'password']))) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Email or password does not match with our record'
+                ], 401);
+            }
+
+            $user = User::where('email', $request->email)->first();
+            return response()->json([
+                'status' => true,
+                'message' => 'User logged in successfully',
+                'token' => $user->createToken("API Token")->plainTextToken
+            ], 200);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage(),
+            ], 500);
+        }
+    }
 }

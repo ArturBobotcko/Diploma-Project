@@ -69,7 +69,7 @@ const RegisterPage = ({ onToggleForm }) => {
       if (error.response && error.response.status === 422) {
         setErrors(error.response.data.errors);
       } else {
-        
+        console.error(error);
       }
     }
   };
