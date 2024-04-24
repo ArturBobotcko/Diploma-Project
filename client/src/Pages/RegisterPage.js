@@ -126,10 +126,10 @@ const RegisterPage = ({ onToggleForm }) => {
             <div className="form-group mb-3 text-start">
               <label className="mb-1">Пароль</label>
               <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className={`form-control ${errors.password ? 'is-invalid' : ''}`} placeholder="Введите ваш пароль"/>
+              {errors.password && <div className="invalid-feedback">{errors.password[0]}</div>}
               <small className="form-text text-muted">
                 Пароль должен содержать 8 и более символов:<br />прописные латинские буквы, строчные латинские буквы и цифры.
               </small>
-              {errors.password && <div className="invalid-feedback">{errors.password[0]}</div>}
             </div>
             <div className="form-group mb-4 text-start">
               <label className="mb-1">Подтвердите пароль</label>
