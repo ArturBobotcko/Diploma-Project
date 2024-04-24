@@ -1,9 +1,9 @@
 import "./App.css";
-import MainPage from "./Pages/MainPage";
+import WelcomePage from "./Pages/WelcomePage";
 
 function App() {
   return (
-    <MainPage />
+    <WelcomePage />
   );
 }
 
