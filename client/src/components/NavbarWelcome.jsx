@@ -29,8 +29,12 @@ const NavbarWelcome = () => {
             <a className="nav-link" href="#">
               Возможности
             </a>
-            <a className="nav-link" href="#"></a>
-            <a className="nav-link" href="#"></a>
+            <a className="nav-link" href="#">
+              Новости
+            </a>
+            <a className="nav-link" href="#">
+              Контакты
+            </a>
           </div>
         </div>
       </div>

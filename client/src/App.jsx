@@ -1,4 +1,4 @@
-import Welcome from "../src/pages/Welcome";
+import Welcome from '../src/pages/Welcome';
 
 const App = () => {
   return (
