@@ -1,8 +1,8 @@
-import "../App.css";
-import Footer from "../components/Footer";
-import NavbarWelcome from "../components/NavbarWelcome";
-import Login from "./Login";
-import { useNavigate } from "react-router-dom";
+import '../App.css';
+import Footer from '../components/Footer';
+import NavbarWelcome from '../components/NavbarWelcome';
+import Login from './Login';
+import { useNavigate } from 'react-router-dom';
 
 const Welcome = () => {
   const navigate = useNavigate();
@@ -12,7 +12,7 @@ const Welcome = () => {
       <NavbarWelcome />
       <div
         className="container-fluid bg-white text-secondary my-5"
-        style={{ flex: "1 0 auto" }}
+        style={{ flex: '1 0 auto' }}
       >
         <div className="container d-flex flex-column gap-3 text-center text-md-start">
           <h1 className="display-6">
@@ -39,7 +39,7 @@ const Welcome = () => {
             <button
               type="button"
               className="btn btn-outline-primary"
-              onClick={() => navigate("/register")}
+              onClick={() => navigate('/register')}
             >
               Регистрация
             </button>

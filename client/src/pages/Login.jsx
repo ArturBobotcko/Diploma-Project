@@ -1,25 +1,25 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import Cookies from "js-cookie";
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async event => {
     event.preventDefault();
     try {
-      const API_URL = "http://localhost:8000/api/login";
+      const API_URL = 'http://localhost:8000/api/login';
       const response = await axios.post(API_URL, {
         email: email,
         password: password,
       });
       console.log(response.data);
-      Cookies.set("token", response.data.token);
-      navigate("/home");
+      Cookies.set('token', response.data.token);
+      navigate('/home');
     } catch (error) {
       if (error.response && error.response.status === 401) {
         setErrors(error.response.data.errors);
@@ -57,10 +57,10 @@ const Login = () => {
                 <label className="mb-1">Email</label>
                 <input
                   type="email"
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={e => setEmail(e.target.value)}
                   onClick={handleInputClick}
                   value={email}
-                  className={`form-control ${errors.email ? "is-invalid" : ""}`}
+                  className={`form-control ${errors.email ? 'is-invalid' : ''}`}
                   placeholder="Введите ваш адрес электронной почты"
                 />
                 {errors.email && (
@@ -71,10 +71,10 @@ const Login = () => {
                 <label className="mb-1">Пароль</label>
                 <input
                   type="password"
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={e => setPassword(e.target.value)}
                   onClick={handleInputClick}
                   value={password}
-                  className={`form-control ${errors.email ? "is-invalid" : ""}`}
+                  className={`form-control ${errors.email ? 'is-invalid' : ''}`}
                   placeholder="Введите ваш пароль"
                 />
                 {errors.email && (

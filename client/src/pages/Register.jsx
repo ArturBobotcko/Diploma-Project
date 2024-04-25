@@ -1,56 +1,56 @@
-import { useState } from "react";
-import NavbarWelcome from "../components/NavbarWelcome";
-import Footer from "../components/Footer";
-import axios from "axios";
+import { useState } from 'react';
+import NavbarWelcome from '../components/NavbarWelcome';
+import Footer from '../components/Footer';
+import axios from 'axios';
 
 const Register = () => {
-  const [selectedRole, setSelectedRole] = useState("");
+  const [selectedRole, setSelectedRole] = useState('');
 
-  const [email, setEmail] = useState("");
-  const [surname, setSurname] = useState("");
-  const [name, setName] = useState("");
-  const [patronym, setPatronym] = useState("");
-  const [role, setRole] = useState("");
-  const [studentClass, setStudentClass] = useState("");
-  const [school, setSchool] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [surname, setSurname] = useState('');
+  const [name, setName] = useState('');
+  const [patronym, setPatronym] = useState('');
+  const [role, setRole] = useState('');
+  const [studentClass, setStudentClass] = useState('');
+  const [school, setSchool] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const [errors, setErrors] = useState({});
 
   const roles = [
     {
-      value: "teacher",
-      label: "Я - Преподаватель",
+      value: 'teacher',
+      label: 'Я - Преподаватель',
     },
     {
-      value: "student",
-      label: "Я - Ученик",
+      value: 'student',
+      label: 'Я - Ученик',
     },
   ];
 
-  const handleRoleChange = (event) => {
+  const handleRoleChange = event => {
     setSelectedRole(event.target.value);
     setRole(event.target.value); // Обновляем также значение поля роли
   };
 
   const clearFields = () => {
-    setEmail("");
-    setSurname("");
-    setName("");
-    setPatronym("");
-    setRole("");
-    setStudentClass("");
-    setSchool("");
-    setPassword("");
-    setConfirmPassword("");
+    setEmail('');
+    setSurname('');
+    setName('');
+    setPatronym('');
+    setRole('');
+    setStudentClass('');
+    setSchool('');
+    setPassword('');
+    setConfirmPassword('');
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async event => {
     event.preventDefault();
 
     try {
-      const API_URL = "http://localhost:8000/api/register";
+      const API_URL = 'http://localhost:8000/api/register';
       const response = await axios.post(API_URL, {
         email: email,
         surname: surname,
@@ -79,7 +79,7 @@ const Register = () => {
       <NavbarWelcome />
       <div
         className="container-fluid bg-white text-secondary my-5"
-        style={{ flex: "1 0 auto" }}
+        style={{ flex: '1 0 auto' }}
       >
         <div className="container d-flex flex-column">
           <h5 className="text-center">Регистрация</h5>
@@ -92,8 +92,8 @@ const Register = () => {
               <input
                 type="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className={`form-control ${errors.email ? "is-invalid" : ""}`}
+                onChange={e => setEmail(e.target.value)}
+                className={`form-control ${errors.email ? 'is-invalid' : ''}`}
                 placeholder="Введите ваш адрес электронной почты"
               />
               {errors.email && (
@@ -105,8 +105,8 @@ const Register = () => {
               <input
                 type="text"
                 value={surname}
-                onChange={(e) => setSurname(e.target.value)}
-                className={`form-control ${errors.surname ? "is-invalid" : ""}`}
+                onChange={e => setSurname(e.target.value)}
+                className={`form-control ${errors.surname ? 'is-invalid' : ''}`}
               />
               {errors.surname && (
                 <div className="invalid-feedback">{errors.surname[0]}</div>
@@ -117,8 +117,8 @@ const Register = () => {
               <input
                 type="text"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
-                className={`form-control ${errors.name ? "is-invalid" : ""}`}
+                onChange={e => setName(e.target.value)}
+                className={`form-control ${errors.name ? 'is-invalid' : ''}`}
               />
               {errors.name && (
                 <div className="invalid-feedback">{errors.name[0]}</div>
@@ -129,9 +129,9 @@ const Register = () => {
               <input
                 type="text"
                 value={patronym}
-                onChange={(e) => setPatronym(e.target.value)}
+                onChange={e => setPatronym(e.target.value)}
                 className={`form-control ${
-                  errors.patronym ? "is-invalid" : ""
+                  errors.patronym ? 'is-invalid' : ''
                 }`}
               />
               {errors.patronym && (
@@ -141,7 +141,7 @@ const Register = () => {
             <div className="form-group mb-3 text-start">
               <label className="mb-1">Роль</label>
               <select
-                className={`form-select ${errors.role ? "is-invalid" : ""}`}
+                className={`form-select ${errors.role ? 'is-invalid' : ''}`}
                 onChange={handleRoleChange}
               >
                 <option selected value="">
@@ -162,22 +162,22 @@ const Register = () => {
               <input
                 type="text"
                 value={school}
-                onChange={(e) => setSchool(e.target.value)}
-                className={`form-control ${errors.school ? "is-invalid" : ""}`}
+                onChange={e => setSchool(e.target.value)}
+                className={`form-control ${errors.school ? 'is-invalid' : ''}`}
               />
               {errors.school && (
                 <div className="invalid-feedback">{errors.school[0]}</div>
               )}
             </div>
-            {selectedRole === "student" && (
+            {selectedRole === 'student' && (
               <div className="form-group mb-3 text-start">
                 <label className="mb-1">Класс</label>
                 <input
                   type="text"
                   value={studentClass}
-                  onChange={(e) => setStudentClass(e.target.value)}
+                  onChange={e => setStudentClass(e.target.value)}
                   className={`form-control ${
-                    errors.school ? "is-invalid" : ""
+                    errors.school ? 'is-invalid' : ''
                   }`}
                 />
                 {errors.student_class && (
@@ -192,9 +192,9 @@ const Register = () => {
               <input
                 type="password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={e => setPassword(e.target.value)}
                 className={`form-control ${
-                  errors.password ? "is-invalid" : ""
+                  errors.password ? 'is-invalid' : ''
                 }`}
                 placeholder="Введите ваш пароль"
               />
@@ -212,9 +212,9 @@ const Register = () => {
               <input
                 type="password"
                 value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                onChange={e => setConfirmPassword(e.target.value)}
                 className={`form-control ${
-                  errors.password ? "is-invalid" : ""
+                  errors.password ? 'is-invalid' : ''
                 }`}
                 placeholder="Подветрдите ваш пароль"
               />
