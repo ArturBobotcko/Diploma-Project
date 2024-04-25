@@ -1,7 +1,7 @@
 import React from "react";
 import logo from "../Assets/logo.svg";
 
-const NavbarComponent = () => {
+const NavbarWelcome = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light border-bottom">
       <div className="container">
@@ -24,4 +24,4 @@ const NavbarComponent = () => {
   );
 };
 
-export default NavbarComponent;
+export default NavbarWelcome;

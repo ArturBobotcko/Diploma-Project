@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import NavbarComponent from "../Components/NavbarComponent";
+import NavbarWelcome from "../Components/NavbarWelcome";
 import Footer from "../Components/Footer";
 import axios from "axios";
 
@@ -50,8 +50,8 @@ const RegisterPage = ({ onToggleForm }) => {
     event.preventDefault();
     
     try {
-      const url = "http://localhost:8000/api/register";
-      const response = await axios.post(url, {
+      const API_URL = "http://localhost:8000/api/register";
+      const response = await axios.post(API_URL, {
         "email": email,
         "surname": surname,
         "name": name,
@@ -76,7 +76,7 @@ const RegisterPage = ({ onToggleForm }) => {
 
   return (
     <div className="container-fluid p-0 d-flex flex-column min-vh-100">
-      <NavbarComponent />
+      <NavbarWelcome />
       <div className="container-fluid bg-white text-secondary my-5" style={{ flex: "1 0 auto" }}>
         <div className="container d-flex flex-column">
           <h5 className="text-center">Регистрация</h5>
