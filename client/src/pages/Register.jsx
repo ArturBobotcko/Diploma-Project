@@ -16,7 +16,16 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({
+    email: '',
+    surname: '',
+    name: '',
+    patronym: '',
+    role: '',
+    student_class: '',
+    school: '',
+    password: '',
+  });
 
   const roles = [
     {
@@ -49,9 +58,9 @@ const Register = () => {
   const handleSubmit = async event => {
     event.preventDefault();
 
-    try {
-      const API_URL = 'http://localhost:8000/api/register';
-      const response = await axios.post(API_URL, {
+    const API_URL = 'http://localhost:8000/api/register';
+    await axios
+      .post(API_URL, {
         email: email,
         surname: surname,
         name: name,
@@ -61,17 +70,22 @@ const Register = () => {
         school: school,
         password: password,
         password_confirmation: confirmPassword,
+      })
+      .then(response => {
+        console.log(response.data);
+        clearFields;
+      })
+      .catch(error => {
+        if (error.response && error.response.status === 422) {
+          setErrors(error.response.data.errors);
+        }
       });
-      console.log(response.data);
-      clearFields();
-    } catch (error) {
-      // console.error("Registration error:", error.response.data);
-      if (error.response && error.response.status === 422) {
-        setErrors(error.response.data.errors);
-      } else {
-        console.error(error);
-      }
-    }
+  };
+
+  const clearErrors = fieldName => {
+    const newErrors = { ...errors };
+    delete newErrors[fieldName];
+    setErrors(newErrors);
   };
 
   return (
@@ -95,6 +109,7 @@ const Register = () => {
                 onChange={e => setEmail(e.target.value)}
                 className={`form-control ${errors.email ? 'is-invalid' : ''}`}
                 placeholder="Введите ваш адрес электронной почты"
+                onClick={() => clearErrors('email')}
               />
               {errors.email && (
                 <div className="invalid-feedback">{errors.email[0]}</div>
@@ -107,6 +122,7 @@ const Register = () => {
                 value={surname}
                 onChange={e => setSurname(e.target.value)}
                 className={`form-control ${errors.surname ? 'is-invalid' : ''}`}
+                onClick={() => clearErrors('surname')}
               />
               {errors.surname && (
                 <div className="invalid-feedback">{errors.surname[0]}</div>
@@ -119,6 +135,7 @@ const Register = () => {
                 value={name}
                 onChange={e => setName(e.target.value)}
                 className={`form-control ${errors.name ? 'is-invalid' : ''}`}
+                onClick={() => clearErrors('name')}
               />
               {errors.name && (
                 <div className="invalid-feedback">{errors.name[0]}</div>
@@ -130,9 +147,8 @@ const Register = () => {
                 type="text"
                 value={patronym}
                 onChange={e => setPatronym(e.target.value)}
-                className={`form-control ${
-                  errors.patronym ? 'is-invalid' : ''
-                }`}
+                className={`form-control ${errors.patronym ? 'is-invalid' : ''}`}
+                onClick={() => clearErrors('patronym')}
               />
               {errors.patronym && (
                 <div className="invalid-feedback">{errors.patronym[0]}</div>
@@ -143,6 +159,7 @@ const Register = () => {
               <select
                 className={`form-select ${errors.role ? 'is-invalid' : ''}`}
                 onChange={handleRoleChange}
+                onClick={() => clearErrors('role')}
               >
                 <option selected value="">
                   Выберите роль
@@ -164,6 +181,7 @@ const Register = () => {
                 value={school}
                 onChange={e => setSchool(e.target.value)}
                 className={`form-control ${errors.school ? 'is-invalid' : ''}`}
+                onClick={() => clearErrors('school')}
               />
               {errors.school && (
                 <div className="invalid-feedback">{errors.school[0]}</div>
@@ -176,9 +194,8 @@ const Register = () => {
                   type="text"
                   value={studentClass}
                   onChange={e => setStudentClass(e.target.value)}
-                  className={`form-control ${
-                    errors.school ? 'is-invalid' : ''
-                  }`}
+                  className={`form-control ${errors.student_class ? 'is-invalid' : ''}`}
+                  onClick={() => clearErrors('student_class')}
                 />
                 {errors.student_class && (
                   <div className="invalid-feedback">
@@ -193,10 +210,9 @@ const Register = () => {
                 type="password"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                className={`form-control ${
-                  errors.password ? 'is-invalid' : ''
-                }`}
+                className={`form-control ${errors.password ? 'is-invalid' : ''}`}
                 placeholder="Введите ваш пароль"
+                onClick={() => clearErrors('password')}
               />
               {errors.password && (
                 <div className="invalid-feedback">{errors.password[0]}</div>
@@ -213,9 +229,8 @@ const Register = () => {
                 type="password"
                 value={confirmPassword}
                 onChange={e => setConfirmPassword(e.target.value)}
-                className={`form-control ${
-                  errors.password ? 'is-invalid' : ''
-                }`}
+                className={`form-control ${errors.password ? 'is-invalid' : ''}`}
+                onClick={() => clearErrors('password')}
                 placeholder="Подветрдите ваш пароль"
               />
               {errors.password && (
