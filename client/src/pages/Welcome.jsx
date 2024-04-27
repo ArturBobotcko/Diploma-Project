@@ -7,15 +7,6 @@ import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
 const Welcome = () => {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const token = Cookies.get('token');
-    if (token) {
-      navigate('/home');
-    }
-  }, []);
-
   return (
     <div className="container-fluid p-0 d-flex flex-column min-vh-100">
       <NavbarWelcome />
@@ -45,15 +36,10 @@ const Welcome = () => {
             >
               Войти
             </button>
-            <button
-              type="button"
-              className="btn btn-outline-primary"
-              onClick={() => navigate('/register')}
-            >
+            <button type="button" className="btn btn-outline-primary">
               Регистрация
             </button>
           </div>
-          <Login />
         </div>
       </div>
       <Footer />

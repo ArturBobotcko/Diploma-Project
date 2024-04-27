@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Throwable;
 
@@ -56,7 +57,7 @@ class AuthController extends Controller
 
             return response()->json([
                 'status' => true,
-                'message' => 'User created successfully'
+                'message' => 'User created successfully',
             ], 200);
         } catch (Throwable $th) {
             return response()->json([
@@ -84,7 +85,9 @@ class AuthController extends Controller
                 ], 401);
             };
 
-            if (!Auth::attempt($request->only(['email', 'password']))) {
+            $remember = $request->input('remember');
+
+            if (!Auth::attempt($request->only(['email', 'password']), $remember)) {
                 return response()->json([
                     'status' => false,
                     'message' => 'Email or password does not match with our record',
@@ -94,14 +97,15 @@ class AuthController extends Controller
                 ], 401);
             }
 
-            $user = User::where('email', $request->email)->first();
+            $user = Auth::user();
+
             return response()->json([
                 'status' => true,
                 'message' => 'User logged in successfully',
-                'token' => $user->createToken("API Token")->plainTextToken
+                'remember_token' => $user->remember_token
             ], 200);
 
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             return response()->json([
                 'status' => false,
                 'message' => $th->getMessage(),
@@ -120,9 +124,12 @@ class AuthController extends Controller
         ], 200);
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
         auth()->user()->tokens()->delete();
+        $user = $request->user();
+        $user->remember_token = null;
+        $user->save();
         return response()->json([
             'status' => true,
             'message' => 'User logged out',
