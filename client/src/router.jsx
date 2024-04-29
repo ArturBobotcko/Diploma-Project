@@ -6,6 +6,7 @@ import NotFound from './pages/NotFound';
 import Login from './pages/Login';
 import DefaultLayout from './components/DefaultLayout';
 import GuestLayout from './components/GuestLayout';
+import UserProfile from './pages/UserProfile';
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
       {
         path: '/home',
         element: <Home />,
+      },
+      {
+        path: '/user/:userId',
+        element: <UserProfile />,
       },
     ],
   },

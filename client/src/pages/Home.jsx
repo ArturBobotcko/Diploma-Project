@@ -7,7 +7,7 @@ const Home = () => {
     return <Navigate to="/welcome" />;
   }
 
-  return <div className="container"></div>;
+  return <div className="container">{user.name}</div>;
 };
 
 export default Home;

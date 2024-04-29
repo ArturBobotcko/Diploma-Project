@@ -21,14 +21,15 @@ const DefaultLayout = () => {
   };
 
   useEffect(() => {
-    axiosClient.get('/user').then(({ data }) => {
+    axiosClient.get('/me').then(({ data }) => {
       setUser(data);
+      console.log(user);
     });
   }, []);
 
   return (
     <div className="container-fluid p-0 d-flex flex-column min-vh-100">
-      <Navbar onLogout={onLogout} />
+      <Navbar onLogout={onLogout} userId={user.id} />
       <div
         className="container-fluid bg-white text-secondary my-5"
         style={{ flex: '1 0 auto' }}

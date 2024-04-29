@@ -1,6 +1,6 @@
 import logo from '../assets/logo.svg';
 
-const Navbar = ({ onLogout }) => {
+const Navbar = ({ onLogout, userId }) => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light border-bottom">
       <div className="container">
@@ -51,7 +51,7 @@ const Navbar = ({ onLogout }) => {
                 aria-labelledby="navbarDropdownMenuLink"
               >
                 <li>
-                  <a className="dropdown-item" href="#">
+                  <a className="dropdown-item" href={`/user/${userId}`}>
                     Профиль
                   </a>
                 </li>
