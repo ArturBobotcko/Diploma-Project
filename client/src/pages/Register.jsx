@@ -12,6 +12,10 @@ const Register = () => {
       value: 'student',
       label: 'Я - Ученик',
     },
+    {
+      value: 'parent',
+      label: 'Я - Родитель',
+    },
   ];
 
   const [selectedRole, setSelectedRole] = useState();

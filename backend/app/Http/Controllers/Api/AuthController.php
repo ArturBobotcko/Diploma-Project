@@ -7,6 +7,7 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\SocialLink;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
@@ -38,6 +39,10 @@ class AuthController extends Controller
             "school" => $data["school"],
             "student_class" => $data["student_class"],
             "password"=> bcrypt($data["password"]),
+        ]);
+
+        SocialLink::create([
+            'user_id' => $user->id,
         ]);
 
         $token = $user->createToken('main')->plainTextToken;
