@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\ParentModel;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,8 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('parent_id');
             $table->unsignedBigInteger('student_id');
 
-            $table->foreign('parent_id')->references('parent_id')->on('parents')->onDelete('cascade');
-            $table->foreign('student_id')->references('student_id')->on('students')->onDelete('cascade');
+            $table->foreign('parent_id')->references('parent_id')->on('parents')->cascadeOnDelete();
+            $table->foreign('student_id')->references('student_id')->on('students')->cascadeOnDelete();
         });
     }
 
