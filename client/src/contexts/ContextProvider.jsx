@@ -2,21 +2,23 @@ import { createContext, useContext, useState } from 'react';
 
 const StateContext = createContext({
   user: null,
-  token: null,
+  isAuthorized: null,
   setUser: () => {},
-  setToken: () => {},
+  setIsAuthorized: () => {},
 });
 
 export const ContextProvider = ({ children }) => {
   const [user, setUser] = useState({});
-  const [token, _setToken] = useState(localStorage.getItem('ACCESS_TOKEN'));
+  const [isAuthorized, _setIsAuthorized] = useState(
+    localStorage.getItem('is_authorized'),
+  );
 
-  const setToken = token => {
-    _setToken(token);
-    if (token) {
-      localStorage.setItem('ACCESS_TOKEN', token);
+  const setIsAuthorized = state => {
+    _setIsAuthorized(state);
+    if (state) {
+      localStorage.setItem('is_authorized', true);
     } else {
-      localStorage.removeItem('ACCESS_TOKEN');
+      localStorage.removeItem('is_authorized');
     }
   };
 
@@ -24,9 +26,9 @@ export const ContextProvider = ({ children }) => {
     <StateContext.Provider
       value={{
         user,
-        token,
+        isAuthorized,
         setUser,
-        setToken,
+        setIsAuthorized,
       }}
     >
       {children}

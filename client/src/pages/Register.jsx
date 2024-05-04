@@ -1,6 +1,8 @@
 import { useRef, useState } from 'react';
 import axiosClient from '../axios-client';
 import { useStateContext } from '../contexts/ContextProvider';
+import { useCookies } from 'react-cookie';
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
   const roles = [
@@ -30,9 +32,10 @@ const Register = () => {
   const passwordRef = useRef();
   const passwordConfirmationRef = useRef();
 
-  const { setUser, setToken } = useStateContext();
+  const { setUser, setIsAuthorized } = useStateContext();
+  const navigate = useNavigate();
 
-  const onSubmit = async event => {
+  const onSubmit = event => {
     event.preventDefault();
     const payload = {
       email: emailRef.current.value,
@@ -40,27 +43,25 @@ const Register = () => {
       name: nameRef.current.value,
       patronym: patronymRef.current.value,
       role: roleRef.current.value,
-      school: schoolRef.current.value,
-      student_class:
-        selectedRole === 'student' ? studentClassRef.current.value : '',
       password: passwordRef.current.value,
       password_confirmation: passwordConfirmationRef.current.value,
     };
 
-    await axiosClient.get('http://localhost:8000/sanctum/csrf-token');
-
-    axiosClient
-      .post('/register', payload)
-      .then(({ data }) => {
-        setUser(data.user);
-        setToken(data.token);
-      })
-      .catch(err => {
-        const response = err.response;
-        if (response && response.status === 422) {
-          setErrors(response.data.errors);
-        }
-      });
+    axiosClient.get('/sanctum/csrf-cookie').then(() => {
+      axiosClient
+        .post('/register', payload)
+        .then(({ data }) => {
+          // navigate('/home');
+          setUser(data.user);
+          setIsAuthorized(true);
+        })
+        .catch(err => {
+          const response = err.response;
+          if (response && response.status === 422) {
+            setErrors(response.data.errors);
+          }
+        });
+    });
   };
 
   const handleChange = e => {
@@ -153,35 +154,6 @@ const Register = () => {
             <div className="invalid-feedback">{errors.role[0]}</div>
           )}
         </div>
-        <div className="form-group mb-3 text-start">
-          <label className="mb-1">Школа</label>
-          <input
-            type="text"
-            name="school"
-            className={`form-control ${errors && errors.school ? 'is-invalid' : ''}`}
-            ref={schoolRef}
-            onChange={handleChange}
-          />
-          {errors && errors.school && (
-            <div className="invalid-feedback">{errors.school[0]}</div>
-          )}
-        </div>
-        {/* TODO: if role is student */}
-        {selectedRole === 'student' && (
-          <div className="form-group mb-3 text-start">
-            <label className="mb-1">Класс</label>
-            <input
-              type="text"
-              name="student_class"
-              className={`form-control ${errors && errors.student_class ? 'is-invalid' : ''}`}
-              ref={studentClassRef}
-              onChange={handleChange}
-            />
-            {errors && errors.student_class && (
-              <div className="invalid-feedback">{errors.student_class[0]}</div>
-            )}
-          </div>
-        )}
         <div className="form-group mb-3 text-start">
           <label className="mb-1">Пароль</label>
           <input

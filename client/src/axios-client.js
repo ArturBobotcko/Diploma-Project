@@ -1,15 +1,14 @@
 import axios from 'axios';
 
+axios.defaults.withCredentials = true;
+axios.defaults.withXSRFToken = true;
+
 // Экземпляр axios
 const axiosClient = axios.create({
   baseURL: `${import.meta.env.VITE_BASE_API_URL}`,
-});
-
-// Перехват запросов
-axiosClient.interceptors.request.use(config => {
-  const token = localStorage.getItem('ACCESS_TOKEN');
-  config.headers.Authorization = `Bearer ${token}`;
-  return config;
+  headers: {
+    'X-Requested-With': 'XMLHttpRequest',
+  },
 });
 
 // Перехват ответов
@@ -23,7 +22,7 @@ axiosClient.interceptors.response.use(
     try {
       const { response } = error;
       if (response.status === 401) {
-        localStorage.removeItem('ACCESS_TOKEN');
+        localStorage.removeItem('is_authorized');
       }
     } catch (e) {
       console.error(e);

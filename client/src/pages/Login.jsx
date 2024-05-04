@@ -7,32 +7,40 @@ const Login = () => {
   const passwordRef = useRef();
   const [errors, setErrors] = useState(null);
 
-  const { setUser, setToken } = useStateContext();
+  const { setUser, setIsAuthorized } = useStateContext();
 
-  const onSubmit = event => {
+  const onSubmit = async event => {
     event.preventDefault();
     const payload = {
       email: emailRef.current.value,
       password: passwordRef.current.value,
     };
-    axiosClient
-      .post('/login', payload)
-      .then(({ data }) => {
-        setUser(data.user);
-        setToken(data.token);
-      })
-      .catch(err => {
-        const response = err.response;
-        if (response && response.status === 422) {
-          if (response.data.errors) {
-            setErrors(response.data.errors);
-          } else {
-            setErrors({
-              email: [response.data.message],
-            });
+
+    await axiosClient.get('/sanctum/csrf-cookie').then(async () => {
+      await axiosClient
+        .post('/login', payload, {
+          headers: {
+            Accept: 'application/json',
+          },
+        })
+        .then(({ data }) => {
+          setUser(data.user);
+          // setToken(data.token);
+          setIsAuthorized(true);
+        })
+        .catch(err => {
+          const response = err.response;
+          if (response && response.status === 422) {
+            if (response.data.errors) {
+              setErrors(response.data.errors);
+            } else {
+              setErrors({
+                email: [response.data.message],
+              });
+            }
           }
-        }
-      });
+        });
+    });
   };
 
   const handleChange = e => {

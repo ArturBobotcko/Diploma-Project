@@ -13,7 +13,7 @@ const UserProfile = () => {
   const params = useParams();
   const [user, setUser] = useState({});
   const [userSocialLinks, setUserSocialLinks] = useState();
-  const [userNotFound, setUserNotFound] = useState(false);
+  // const [userNotFound, setUserNotFound] = useState(false);
 
   useEffect(() => {
     axiosClient
@@ -21,19 +21,18 @@ const UserProfile = () => {
       .then(response => {
         console.log('/user/id запрос');
         setUser(response.data.user);
-        setUserSocialLinks(response.data.social_links[0]);
+        // setUserSocialLinks(response.data.social_links[0]);
         console.log(user);
       })
       .catch(err => {
         console.error(err);
-        setUserNotFound(true);
       });
   }, []);
 
   return (
     <div>
-      {userNotFound && <NotFound />}
-      {!userNotFound && (
+      {user === null && <NotFound />}
+      {user && (
         <div className="container">
           <div className="container-fluid p-0">
             <div className="row mb-4">

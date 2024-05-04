@@ -4,8 +4,8 @@ import NavbarWelcome from './NavbarWelcome';
 import Footer from './Footer';
 
 const GuestLayout = () => {
-  const { token } = useStateContext();
-  if (token) {
+  const { isAuthorized } = useStateContext();
+  if (isAuthorized) {
     return <Navigate to="/" />;
   }
 

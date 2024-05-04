@@ -2,12 +2,9 @@ import { Navigate } from 'react-router-dom';
 import { useStateContext } from '../contexts/ContextProvider';
 
 const Home = () => {
-  const { user, token } = useStateContext();
-  if (!token) {
-    return <Navigate to="/welcome" />;
-  }
+  const { user, isAuthorized } = useStateContext();
 
-  return <div className="container">{user.name}</div>;
+  return <div className="container"></div>;
 };
 
 export default Home;
