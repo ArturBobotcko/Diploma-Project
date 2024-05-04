@@ -29,17 +29,12 @@ class RegisterRequest extends FormRequest
             'name' => 'required|string|regex:/^[^\d]+$/u',
             'patronym' => 'nullable|string|regex:/^[^\d]+$/u',
             'role' => 'required|string',
-            'school' => 'required|string',
             'password' => [
                 'required',
                 'confirmed',
                 Password::min(8)
                     ->letters()
             ],
-
-            'student_class' => [
-                Rule::requiredIf($this->input('role') === 'student'),
-            ]
         ];
     }
 }

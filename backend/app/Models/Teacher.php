@@ -10,4 +10,8 @@ class Teacher extends Model
     use HasFactory;
 
     protected $table = "teachers";
+    protected $primaryKey = "id";
+    protected $fillable = [
+        "id"
+    ];
 }
