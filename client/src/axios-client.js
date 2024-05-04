@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Экземпляр axios
 const axiosClient = axios.create({
-  baseURL: `${import.meta.env.VITE_BASE_API_URL}/api`,
+  baseURL: `${import.meta.env.VITE_BASE_API_URL}`,
 });
 
 // Перехват запросов

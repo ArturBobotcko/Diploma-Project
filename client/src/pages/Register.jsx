@@ -32,7 +32,7 @@ const Register = () => {
 
   const { setUser, setToken } = useStateContext();
 
-  const onSubmit = event => {
+  const onSubmit = async event => {
     event.preventDefault();
     const payload = {
       email: emailRef.current.value,
@@ -46,6 +46,8 @@ const Register = () => {
       password: passwordRef.current.value,
       password_confirmation: passwordConfirmationRef.current.value,
     };
+
+    await axiosClient.get('http://localhost:8000/sanctum/csrf-token');
 
     axiosClient
       .post('/register', payload)
