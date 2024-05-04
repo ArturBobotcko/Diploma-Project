@@ -28,6 +28,7 @@ class AuthController extends Controller
             ], 422);
         }
 
+
         /**
          * Create a API token
          */

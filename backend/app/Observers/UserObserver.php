@@ -16,7 +16,6 @@ class UserObserver
     public function created(User $user): void
     {
         $role = Role::find($user->role_id);
-        echo $role["name"];
         switch ($role["name"]) {
             case 'teacher':
                 Teacher::create([

@@ -8,12 +8,6 @@ import axiosClient from '../axios-client';
 const DefaultLayout = () => {
   const { user, token, setToken, setUser } = useStateContext();
 
-  useEffect(() => {
-    axiosClient.get('/me').then(({ data }) => {
-      setUser(data.user);
-    });
-  }, []);
-
   const onLogout = event => {
     event.preventDefault();
 
@@ -26,6 +20,12 @@ const DefaultLayout = () => {
   if (!token) {
     return <Navigate to="/welcome" />;
   }
+
+  useEffect(() => {
+    axiosClient.get('/me').then(({ data }) => {
+      setUser(data.user);
+    });
+  }, []);
 
   return (
     <div className="container-fluid p-0 d-flex flex-column min-vh-100">
