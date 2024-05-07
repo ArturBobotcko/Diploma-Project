@@ -42,7 +42,7 @@ const UserProfile = () => {
         <div className="container">
           <div className="container-fluid p-0">
             <div className="row mb-4">
-              <div className="col-3">
+              <div className="col-lg-3 col-12 mb-4">
                 <div className="card text-center text-dark bg-light">
                   <img src="" alt="photo" className="card-img-top" />
                   <div className="card-body">
@@ -56,46 +56,52 @@ const UserProfile = () => {
                   </div>
                 </div>
               </div>
-              <div className="col">
+              <div className="col-lg-9 col-12">
                 <div className="card text-dark bg-light">
                   <div className="card-body">
                     <div className="row">
-                      <div className="col-3">
+                      <div className="col-5 col-md-3">
                         <h6 className="mb-0">Полное имя</h6>
                       </div>
-                      <div className="col">
+                      <div className="col-7 col-md-9">
                         {user.surname} {user.name} {user.patronym}
                       </div>
                     </div>
                     <hr />
                     <div className="row">
-                      <div className="col-3">
+                      <div className="col-5 col-md-3">
                         <h6 className="mb-0">Почта</h6>
                       </div>
-                      <div className="col">{user.email}</div>
+                      <div className="col-7 col-md-9">{user.email}</div>
                     </div>
                     <hr />
                     <div className="row">
-                      <div className="col-3">
+                      <div className="col-5 col-md-3">
                         <h6 className="mb-0">Номер телефона</h6>
                       </div>
                       {user.phone_number === null ? (
-                        <div className="col text-muted">нет данных</div>
+                        <div className="col-7 col-md-9 text-muted">
+                          нет данных
+                        </div>
                       ) : (
-                        <div className="col">{user.phone_number}</div>
+                        <div className="col-7 col-md-9">
+                          {user.phone_number}
+                        </div>
                       )}
                     </div>
                     {user.role.name === 'student' && (
                       <>
                         <hr />
                         <div className="row">
-                          <div className="col-3">
+                          <div className="col-5 col-md-3">
                             <h6 className="mb-0">Класс</h6>
                           </div>
                           {userStudentClass === null ? (
-                            <div className="col text-muted">нет данных</div>
+                            <div className="col-7 col-md-9 text-muted">
+                              нет данных
+                            </div>
                           ) : (
-                            <div className="col">
+                            <div className="col-7 col-md-9">
                               {userStudentClass.number} &quot;
                               {userStudentClass.letter}&quot;
                             </div>
@@ -105,10 +111,10 @@ const UserProfile = () => {
                           <>
                             <hr />
                             <div className="row">
-                              <div className="col-3">
+                              <div className="col-5 col-md-3">
                                 <h6 className="mb-0">Родители</h6>
                               </div>
-                              <div className="col-8">
+                              <div className="col-7 col-md-9 d-flex flex-column gap-2">
                                 {userParents.map((element, index) => (
                                   <a
                                     className="link-primary"
@@ -131,10 +137,10 @@ const UserProfile = () => {
                         <>
                           <hr />
                           <div className="row">
-                            <div className="col-3">
+                            <div className="col-5 col-md-3">
                               <h6 className="mb-0">Дети</h6>
                             </div>
-                            <div className="col-8">
+                            <div className="col-7 col-md-9">
                               {userChildren.map((element, index) => (
                                 <a
                                   className="link-primary"
@@ -155,7 +161,7 @@ const UserProfile = () => {
               </div>
             </div>
             <div className="row text-muted">
-              <div className="col-3 ">
+              <div className="col-lg-3 col-12 mb-4">
                 <div className="card bg-light">
                   <div className="card-body bg-light p-0">
                     <ul className="list-group list-group-flush">
@@ -229,7 +235,7 @@ const UserProfile = () => {
                   </div>
                 </div>
               </div>
-              <div className="col">
+              <div className="col-lg-9 col-12">
                 <div className="card text-dark bg-light">
                   <div className="card-header">Активность</div>
                   <div className="card-body"></div>

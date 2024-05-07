@@ -92,6 +92,8 @@ class UserController extends Controller
 
     public function getAuthUser(Request $request)
     {
-        return response()->json(["user"=> $request->user(), "social_links" => SocialLink::where("user_id", $request->user()->id)->get()]);
+        $user = $request->user();
+        $user = $this->getUserById($user->id);
+        return $user;
     }
 }
