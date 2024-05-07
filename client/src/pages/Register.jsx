@@ -1,7 +1,6 @@
 import { useRef, useState } from 'react';
 import axiosClient from '../axios-client';
 import { useStateContext } from '../contexts/ContextProvider';
-import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
@@ -27,8 +26,6 @@ const Register = () => {
   const nameRef = useRef();
   const patronymRef = useRef();
   const roleRef = useRef();
-  const schoolRef = useRef();
-  const studentClassRef = useRef();
   const passwordRef = useRef();
   const passwordConfirmationRef = useRef();
 

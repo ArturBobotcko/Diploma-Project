@@ -3,7 +3,14 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\SocialLink;
+use App\Models\Student;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -52,4 +59,30 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function student(): HasOne
+    {
+        return $this->hasOne(Student::class, 'id');
+    }
+
+    public function parent(): HasOne
+    {
+        return $this->hasOne(ParentModel::class, 'id');
+    }
+
+    public function role(): BelongsTo
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    public function socialLinks(): HasOne
+    {
+        return $this->hasOne(SocialLink::class);
+    }
 }
+
+/**
+ * TODO: Разобраться со связями
+ * Сделать так, чтобы User мог получить либо детей, либо родителей, а также
+ * класс обучения
+ */

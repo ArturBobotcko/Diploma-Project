@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\ParentModel;
+use App\Models\SocialLink;
+use App\Models\Student;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -67,6 +70,28 @@ class UserController extends Controller
     public function getUserById(string $id)
     {
         $user = User::find($id);
+        if ($user === null) {
+            return response()->json(["message"=> "Unknown user"],404);
+        }
+        $user->role;
+        $user->socialLinks;
+        if ($user->role->name === "student") {
+            $user->student->studentClass;
+            foreach($user->student->parents as $parent)
+            {
+                $parent->user;
+            }
+        } else if ($user->role->name === "parent") {
+            foreach($user->parent->children as $student)
+            {
+                $student->user;
+            }
+        }
         return response()->json(["user" => $user]);
+    }
+
+    public function getAuthUser(Request $request)
+    {
+        return response()->json(["user"=> $request->user(), "social_links" => SocialLink::where("user_id", $request->user()->id)->get()]);
     }
 }

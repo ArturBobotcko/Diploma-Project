@@ -25,7 +25,6 @@ const Login = () => {
         })
         .then(({ data }) => {
           setUser(data.user);
-          // setToken(data.token);
           setIsAuthorized(true);
         })
         .catch(err => {

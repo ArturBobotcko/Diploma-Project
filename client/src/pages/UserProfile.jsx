@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { Navigate, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import axiosClient from '../axios-client';
-import { useStateContext } from '../contexts/ContextProvider';
-import NotFound from './NotFound';
 
 import tg from '../assets/tg.svg';
 import vk from '../assets/vk.svg';
@@ -11,27 +9,35 @@ import viber from '../assets/viber.svg';
 
 const UserProfile = () => {
   const params = useParams();
-  const [user, setUser] = useState({});
-  const [userSocialLinks, setUserSocialLinks] = useState();
-  // const [userNotFound, setUserNotFound] = useState(false);
+  const [user, setUser] = useState(null);
+  const [userSocialLinks, setUserSocialLinks] = useState([]);
+  const [userParents, setUserParents] = useState([]);
+  const [userChildren, setUserChildren] = useState([]);
+  const [userStudentClass, setUserStudentClass] = useState();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     axiosClient
-      .get(`/user/${params.userId}`)
+      .get(`/api/user/${params.userId}`)
       .then(response => {
-        console.log('/user/id запрос');
         setUser(response.data.user);
-        // setUserSocialLinks(response.data.social_links[0]);
-        console.log(user);
+        setUserSocialLinks(response.data.user.social_links);
+        if (response.data.user.role.name === 'student') {
+          setUserParents(response.data.user.student.parents);
+          setUserStudentClass(response.data.user.student.student_class);
+        } else if (response.data.user.role.name === 'parent') {
+          setUserChildren(response.data.user.parent.children);
+        }
       })
       .catch(err => {
         console.error(err);
+        navigate(`/user/${params.userId}`);
       });
   }, []);
 
   return (
     <div>
-      {user === null && <NotFound />}
       {user && (
         <div className="container">
           <div className="container-fluid p-0">
@@ -73,33 +79,77 @@ const UserProfile = () => {
                       <div className="col-3">
                         <h6 className="mb-0">Номер телефона</h6>
                       </div>
-                      <div className="col">{user.phone_number}</div>
+                      {user.phone_number === null ? (
+                        <div className="col text-muted">нет данных</div>
+                      ) : (
+                        <div className="col">{user.phone_number}</div>
+                      )}
                     </div>
-                    <hr />
-                    <div className="row">
-                      <div className="col-3">
-                        <h6 className="mb-0">Школа</h6>
-                      </div>
-                      <div className="col">{user.school}</div>
-                    </div>
-                    {user.role === 'student' && (
+                    {user.role.name === 'student' && (
                       <>
                         <hr />
                         <div className="row">
                           <div className="col-3">
                             <h6 className="mb-0">Класс</h6>
                           </div>
-                          <div className="col">{user.student_class}</div>
+                          {userStudentClass === null ? (
+                            <div className="col text-muted">нет данных</div>
+                          ) : (
+                            <div className="col">
+                              {userStudentClass.number} &quot;
+                              {userStudentClass.letter}&quot;
+                            </div>
+                          )}
                         </div>
-                        <hr />
-                        <div className="row">
-                          <div className="col-3">
-                            <h6 className="mb-0">Родители</h6>
-                          </div>
-                          <div className="col">Родители</div>
-                        </div>
+                        {userParents.length !== 0 && (
+                          <>
+                            <hr />
+                            <div className="row">
+                              <div className="col-3">
+                                <h6 className="mb-0">Родители</h6>
+                              </div>
+                              <div className="col-8">
+                                {userParents.map((element, index) => (
+                                  <a
+                                    className="link-primary"
+                                    key={index}
+                                    href={'/user/' + element.id}
+                                  >
+                                    {element.user.surname} {element.user.name}{' '}
+                                    {element.user.patronym}
+                                    <br />
+                                  </a>
+                                ))}
+                              </div>
+                            </div>
+                          </>
+                        )}
                       </>
                     )}
+                    {user.role.name === 'parent' &&
+                      userChildren.length !== 0 && (
+                        <>
+                          <hr />
+                          <div className="row">
+                            <div className="col-3">
+                              <h6 className="mb-0">Дети</h6>
+                            </div>
+                            <div className="col-8">
+                              {userChildren.map((element, index) => (
+                                <a
+                                  className="link-primary"
+                                  key={index}
+                                  href={'/user/' + element.id}
+                                >
+                                  {element.user.surname} {element.user.name}{' '}
+                                  {element.user.patronym}
+                                  <br />
+                                </a>
+                              ))}
+                            </div>
+                          </div>
+                        </>
+                      )}
                   </div>
                 </div>
               </div>
@@ -112,17 +162,17 @@ const UserProfile = () => {
                       <li className="list-group-item text-center bg-light text-dark">
                         <h5 className="mb-0">Соц.сети</h5>
                       </li>
-                      {userSocialLinks === undefined ||
-                        (!userSocialLinks.vk &&
-                          !userSocialLinks.tg &&
-                          !userSocialLinks.ok &&
-                          !userSocialLinks.viber && (
-                            <li className="list-group-item d-flex bg-light flex-row align-items-center text-center">
-                              <h6 className="mb-0 me-2">
-                                Пользователь не указал ни одной социальной сети
-                              </h6>
-                            </li>
-                          ))}
+                      {userSocialLinks &&
+                        !userSocialLinks.vk &&
+                        !userSocialLinks.tg &&
+                        !userSocialLinks.ok &&
+                        !userSocialLinks.viber && (
+                          <li className="list-group-item d-flex bg-light flex-row align-items-center text-center">
+                            <h6 className="mb-0 me-2">
+                              Пользователь не указал ни одной социальной сети
+                            </h6>
+                          </li>
+                        )}
                       {userSocialLinks && userSocialLinks.vk && (
                         <li className="list-group-item d-flex flex-row align-items-center">
                           <h6 className="mb-0 me-2">

@@ -24,9 +24,15 @@ const DefaultLayout = () => {
   }
 
   useEffect(() => {
-    axiosClient.get('/api/user').then(({ data }) => {
-      setUser(data.user);
-    });
+    axiosClient
+      .get('/api/user')
+      .then(({ data }) => {
+        setUser(data.user);
+      })
+      .catch(err => {
+        console.error(err);
+        isAuthorized(false);
+      });
   }, []);
 
   return (
