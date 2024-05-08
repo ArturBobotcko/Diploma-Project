@@ -96,4 +96,12 @@ class UserController extends Controller
         $user = $this->getUserById($user->id);
         return $user;
     }
+
+    public function uploadAvatar(Request $request)
+    {
+        $user = $request->user();
+        $filepath = $request->file('file')->store('avatars');
+        $user->update(['avatar'=> $filepath]);
+        $user->save();
+    }
 }

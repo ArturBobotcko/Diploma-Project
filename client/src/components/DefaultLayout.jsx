@@ -2,12 +2,13 @@ import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 import { useStateContext } from '../contexts/ContextProvider';
 import Navbar from './Navbar';
 import Footer from './Footer';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import axiosClient from '../axios-client';
 
 const DefaultLayout = () => {
   const { user, isAuthorized, setIsAuthorized, setUser } = useStateContext();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
 
   const onLogout = event => {
     event.preventDefault();
@@ -31,16 +32,19 @@ const DefaultLayout = () => {
       })
       .catch(err => {
         console.error(err);
-        isAuthorized(false);
+        setIsAuthorized(false);
       });
   }, []);
 
   return (
-    <div className="container-fluid p-0 d-flex flex-column min-vh-100">
-      {user && <Navbar onLogout={onLogout} userId={user.id} />}
-      {!user && <Navbar onLogout={onLogout} />}
+    <div className="container-fluid bg-light p-0 d-flex flex-column min-vh-100">
+      {user ? (
+        <Navbar onLogout={onLogout} userId={user.id} />
+      ) : (
+        <Navbar onLogout={onLogout} />
+      )}
       <div
-        className="container-fluid bg-white text-secondary my-5"
+        className="container-fluid  text-secondary my-5"
         style={{ flex: '1 0 auto' }}
       >
         <Outlet />

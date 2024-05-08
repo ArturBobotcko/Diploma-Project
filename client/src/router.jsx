@@ -7,6 +7,7 @@ import Login from './pages/Login';
 import DefaultLayout from './components/DefaultLayout';
 import GuestLayout from './components/GuestLayout';
 import UserProfile from './pages/UserProfile';
+import Settings from './pages/Settings';
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
       {
         path: '/user/:userId',
         element: <UserProfile />,
+      },
+      {
+        path: '/settings',
+        element: <Settings />,
       },
     ],
   },

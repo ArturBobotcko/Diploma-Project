@@ -2,7 +2,7 @@ import logo from '../assets/logo.svg';
 
 const NavbarWelcome = () => {
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+    <nav className="navbar navbar-expand-lg navbar-light bg-white border-bottom">
       <div className="container">
         <a className="navbar-brand" href="/">
           <img src={logo} width="36" />

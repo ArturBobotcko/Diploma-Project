@@ -1,15 +1,18 @@
-import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState, useRef } from 'react';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import axiosClient from '../axios-client';
+import NotFound from './NotFound';
 
 import tg from '../assets/tg.svg';
 import vk from '../assets/vk.svg';
 import ok from '../assets/ok.svg';
 import viber from '../assets/viber.svg';
+// import defaultProfilePicture from '../assets/default_profile_picture.jpg';
 
 const UserProfile = () => {
   const params = useParams();
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [userSocialLinks, setUserSocialLinks] = useState([]);
   const [userParents, setUserParents] = useState([]);
   const [userChildren, setUserChildren] = useState([]);
@@ -32,9 +35,78 @@ const UserProfile = () => {
       })
       .catch(err => {
         console.error(err);
-        navigate(`/user/${params.userId}`);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
+
+  if (loading) {
+    return (
+      <div className="container d-flex justify-content-center">
+        <div className="spinner-border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
+
+  // Если user === null, возвращаем компонент NotFound
+  if (!user) {
+    return <Navigate to="/not-found" />;
+  }
+
+  const formatBirthDate = birthDate => {
+    const dateParts = birthDate.split('-');
+    const year = parseInt(dateParts[0]);
+    const month = parseInt(dateParts[1]);
+    const day = parseInt(dateParts[2]);
+
+    const months = [
+      'января',
+      'февраля',
+      'марта',
+      'апреля',
+      'мая',
+      'июня',
+      'июля',
+      'августа',
+      'сентября',
+      'октября',
+      'ноября',
+      'декабря',
+    ];
+
+    const monthName = months[month - 1];
+
+    return `${day} ${monthName} ${year}`;
+  };
+
+  const getAge = dateString => {
+    var today = new Date();
+    var birthDate = new Date(dateString);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return `${age} ${getYearWord(age)}`;
+  };
+
+  const getYearWord = age => {
+    const lastDigit = age % 10;
+    const lastTwoDigits = age % 100;
+
+    if (lastTwoDigits >= 11 && lastTwoDigits <= 14) {
+      return 'лет';
+    } else if (lastDigit === 1) {
+      return 'год';
+    } else if (lastDigit >= 2 && lastDigit <= 4) {
+      return 'года';
+    } else {
+      return 'лет';
+    }
+  };
 
   return (
     <div>
@@ -43,8 +115,18 @@ const UserProfile = () => {
           <div className="container-fluid p-0">
             <div className="row mb-4">
               <div className="col-lg-3 col-12 mb-4">
-                <div className="card text-center text-dark bg-light">
-                  <img src="" alt="photo" className="card-img-top" />
+                <div className="card text-center text-dark">
+                  <img
+                    src={'http://localhost:8000/' + user.avatar}
+                    alt="avatar"
+                    className="card-img-top"
+                    style={{
+                      width: '100%', // Ширина равна 100% родительского элемента
+                      height: 'auto', // Высота автоматически подстраивается
+                      aspectRatio: '1 / 1', // Аспектное соотношение 1:1
+                      objectFit: 'cover', // Заполнение всего контейнера
+                    }}
+                  />
                   <div className="card-body">
                     <div className="card-title">
                       <h4>
@@ -57,7 +139,7 @@ const UserProfile = () => {
                 </div>
               </div>
               <div className="col-lg-9 col-12">
-                <div className="card text-dark bg-light">
+                <div className="card text-dark">
                   <div className="card-body">
                     <div className="row">
                       <div className="col-5 col-md-3">
@@ -66,6 +148,23 @@ const UserProfile = () => {
                       <div className="col-7 col-md-9">
                         {user.surname} {user.name} {user.patronym}
                       </div>
+                    </div>
+                    <hr />
+                    <div className="row">
+                      <div className="col-5 col-md-3">
+                        <h6 className="mb-0">Дата рождения</h6>
+                      </div>
+
+                      {user.birth_date === null ? (
+                        <div className="col-7 col-md-9 text-muted">
+                          нет данных
+                        </div>
+                      ) : (
+                        <div className="col-7 col-md-9">
+                          {formatBirthDate(user.birth_date)} (
+                          {getAge(user.birth_date)})
+                        </div>
+                      )}
                     </div>
                     <hr />
                     <div className="row">
@@ -162,10 +261,10 @@ const UserProfile = () => {
             </div>
             <div className="row text-muted">
               <div className="col-lg-3 col-12 mb-4">
-                <div className="card bg-light">
-                  <div className="card-body bg-light p-0">
+                <div className="card ">
+                  <div className="card-body  p-0">
                     <ul className="list-group list-group-flush">
-                      <li className="list-group-item text-center bg-light text-dark">
+                      <li className="list-group-item text-center text-dark">
                         <h5 className="mb-0">Соц.сети</h5>
                       </li>
                       {userSocialLinks &&
@@ -173,7 +272,7 @@ const UserProfile = () => {
                         !userSocialLinks.tg &&
                         !userSocialLinks.ok &&
                         !userSocialLinks.viber && (
-                          <li className="list-group-item d-flex bg-light flex-row align-items-center text-center">
+                          <li className="list-group-item d-flex  flex-row align-items-center text-center">
                             <h6 className="mb-0 me-2">
                               Пользователь не указал ни одной социальной сети
                             </h6>
@@ -186,7 +285,7 @@ const UserProfile = () => {
                           </h6>
                           <a
                             className="text-decoration-none link-info"
-                            href="#"
+                            href={userSocialLinks.vk}
                           >
                             ВКонтакте
                           </a>
@@ -199,7 +298,7 @@ const UserProfile = () => {
                           </h6>
                           <a
                             className="text-decoration-none link-info"
-                            href="#"
+                            href={userSocialLinks.tg}
                           >
                             Telegram
                           </a>
@@ -212,7 +311,7 @@ const UserProfile = () => {
                           </h6>
                           <a
                             className="text-decoration-none link-info"
-                            href="#"
+                            href={userSocialLinks.ok}
                           >
                             Одноклассники
                           </a>
@@ -225,7 +324,7 @@ const UserProfile = () => {
                           </h6>
                           <a
                             className="text-decoration-none link-info"
-                            href="#"
+                            href={userSocialLinks.viber}
                           >
                             Viber
                           </a>
@@ -236,8 +335,8 @@ const UserProfile = () => {
                 </div>
               </div>
               <div className="col-lg-9 col-12">
-                <div className="card text-dark bg-light">
-                  <div className="card-header">Активность</div>
+                <div className="card text-dark ">
+                  <div className="card-header bg-white">Активность</div>
                   <div className="card-body"></div>
                 </div>
               </div>

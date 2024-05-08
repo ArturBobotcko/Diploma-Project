@@ -2,7 +2,7 @@ import logo from '../assets/logo.svg';
 
 const Navbar = ({ onLogout, userId }) => {
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+    <nav className="navbar navbar-expand-lg navbar-light bg-white border-bottom">
       <div className="container">
         <a className="navbar-brand" href="/">
           <img src={logo} width="36" />
@@ -35,6 +35,8 @@ const Navbar = ({ onLogout, userId }) => {
                 Сообщения
               </a>
             </li>
+          </ul>
+          <ul className="navbar-nav ms-auto">
             <li className="nav-item dropdown">
               <a
                 className="nav-link dropdown-toggle"
@@ -47,18 +49,18 @@ const Navbar = ({ onLogout, userId }) => {
                 Профиль
               </a>
               <ul
-                className="dropdown-menu"
+                className="dropdown-menu "
                 aria-labelledby="navbarDropdownMenuLink"
               >
                 <li>
                   <a className="dropdown-item" href={`/user/${userId}`}>
-                    Профиль
+                    Мой профиль
                   </a>
                 </li>
                 <li>
-                  <button className="dropdown-item" href="#">
+                  <a className="dropdown-item" href="/settings">
                     Настройки
-                  </button>
+                  </a>
                 </li>
                 <li>
                   <hr className="dropdown-divider" />

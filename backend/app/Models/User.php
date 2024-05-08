@@ -34,7 +34,9 @@ class User extends Authenticatable
         'email',
         'password',
         'phone_number',
-        'role_id'
+        'role_id',
+        'avatar',
+        'birth_date'
     ];
 
     /**
@@ -57,6 +59,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'birth_date' => 'date:Y-m-d'
         ];
     }
 
@@ -78,6 +81,11 @@ class User extends Authenticatable
     public function socialLinks(): HasOne
     {
         return $this->hasOne(SocialLink::class);
+    }
+
+    public function teacher(): HasOne
+    {
+        return $this->hasOne(Teacher::class, 'id');
     }
 }
 
