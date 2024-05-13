@@ -43,8 +43,9 @@ const DefaultLayout = () => {
       ) : (
         <Navbar onLogout={onLogout} />
       )}
+
       <div
-        className="container-fluid  text-secondary my-5"
+        className="container-fluid text-secondary my-5"
         style={{ flex: '1 0 auto' }}
       >
         <Outlet />

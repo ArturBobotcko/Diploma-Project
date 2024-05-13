@@ -8,6 +8,7 @@ import DefaultLayout from './components/DefaultLayout';
 import GuestLayout from './components/GuestLayout';
 import UserProfile from './pages/UserProfile';
 import Settings from './pages/Settings';
+import GradesLayout from './components/GradesLayout';
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
       {
         path: '/home',
         element: <Home />,
+      },
+      {
+        path: '/grades',
+        element: <GradesLayout />,
       },
       {
         path: '/user/:userId',
