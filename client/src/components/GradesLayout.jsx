@@ -2,6 +2,7 @@ import React from 'react';
 import { useStateContext } from '../contexts/ContextProvider';
 import StudentGrades from '../pages/StudentGrades';
 import TeacherGrades from '../pages/TeacherGrades';
+import ParentGrades from '../pages/ParentGrades';
 
 const Grades = () => {
   const { user, isAuthorized } = useStateContext();

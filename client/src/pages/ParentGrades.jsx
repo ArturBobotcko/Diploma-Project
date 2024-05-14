@@ -1,14 +1,7 @@
-import { useMemo, useState, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { useStateContext } from '../contexts/ContextProvider';
 
-const StudentGrades = () => {
-  const { user } = useStateContext();
-  const [userDisciplines, setUserDisciplines] = useState(null);
-
-  useEffect(() => {
-    setUserDisciplines(user.disciplines);
-  }, [user]);
-
+const ParentGrades = () => {
   const average = nums => {
     let sum = 0;
     nums.forEach(element => {
@@ -17,14 +10,30 @@ const StudentGrades = () => {
     return sum / nums.length;
   };
 
+  const { user } = useStateContext();
+  const [selectedChild, setSelectedChild] = useState(null);
+
   const averages = useMemo(() => {
-    if (!userDisciplines) return [];
-    return userDisciplines.map(element => average(element.grades));
-  }, [userDisciplines]);
+    if (!selectedChild || !selectedChild.disciplines) return [];
+    return selectedChild.disciplines.map(element => average(element.grades));
+  }, [selectedChild]);
 
   return (
     <div className="container">
-      {userDisciplines && (
+      <select
+        className="form-select mb-3 col-3"
+        onChange={e => setSelectedChild(user.children[e.target.value])}
+      >
+        <option selected value="">
+          Выберите ученика
+        </option>
+        {user.children.map((child, index) => (
+          <option key={index} value={index}>
+            {child.surname} {child.name} {child.patronym}
+          </option>
+        ))}
+      </select>
+      {selectedChild && (
         <div className="container-fluid p-0">
           <div className="table-responsive">
             <table
@@ -41,7 +50,7 @@ const StudentGrades = () => {
                 </tr>
               </thead>
               <tbody>
-                {userDisciplines.map((element, index) => {
+                {selectedChild.disciplines.map((element, index) => {
                   const avg = averages[index];
                   return (
                     <tr key={index}>
@@ -49,19 +58,19 @@ const StudentGrades = () => {
                       <td>{element.name}</td>
                       <td>
                         <div className="d-flex gap-1 flex-row">
-                          {element.grades.map((grade, gradeIndex) => (
+                          {element.grades.map((element, index) => (
                             <div
-                              key={gradeIndex}
+                              key={index}
                               className={
                                 'd-inline-block p-1 fw-bold text-white ' +
-                                (grade.grade_value <= 3
+                                (element.grade_value <= 3
                                   ? 'bg-danger'
-                                  : grade.grade_value === 4
+                                  : element.grade_value === 4
                                     ? 'bg-warning'
                                     : 'bg-success')
                               }
                             >
-                              {grade.grade_value}
+                              {element.grade_value}
                             </div>
                           ))}
                         </div>
@@ -69,18 +78,20 @@ const StudentGrades = () => {
                       <td></td>
                       <td>
                         <div className="d-flex gap-1 flex-row">
-                          <div
-                            className={
-                              'd-inline-block p-1 fw-bold text-white ' +
-                              (avg <= 3.4
-                                ? 'bg-danger'
-                                : avg <= 4.4
-                                  ? 'bg-warning'
-                                  : 'bg-success')
-                            }
-                          >
-                            {avg}
-                          </div>
+                          {!isNaN(avg) && (
+                            <div
+                              className={
+                                'd-inline-block p-1 fw-bold text-white ' +
+                                (avg <= 3.4
+                                  ? 'bg-danger'
+                                  : avg <= 4.4
+                                    ? 'bg-warning'
+                                    : 'bg-success')
+                              }
+                            >
+                              {avg}
+                            </div>
+                          )}
                         </div>
                       </td>
                     </tr>
@@ -95,4 +106,4 @@ const StudentGrades = () => {
   );
 };
 
-export default StudentGrades;
+export default ParentGrades;

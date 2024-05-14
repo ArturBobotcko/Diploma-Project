@@ -1,5 +1,5 @@
-import { useEffect, useState, useRef } from 'react';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import axiosClient from '../axios-client';
 import NotFound from './NotFound';
 
@@ -7,30 +7,30 @@ import tg from '../assets/tg.svg';
 import vk from '../assets/vk.svg';
 import ok from '../assets/ok.svg';
 import viber from '../assets/viber.svg';
-// import defaultProfilePicture from '../assets/default_profile_picture.jpg';
 
 const UserProfile = () => {
   const params = useParams();
   const [user, setUser] = useState(null);
+  const [userRole, setUserRole] = useState([]);
   const [loading, setLoading] = useState(true);
   const [userSocialLinks, setUserSocialLinks] = useState([]);
   const [userParents, setUserParents] = useState([]);
   const [userChildren, setUserChildren] = useState([]);
   const [userStudentClass, setUserStudentClass] = useState();
 
-  const navigate = useNavigate();
-
   useEffect(() => {
+    setLoading(true);
     axiosClient
       .get(`/api/user/${params.userId}`)
       .then(response => {
         setUser(response.data.user);
         setUserSocialLinks(response.data.user.social_links);
+        setUserRole(response.data.user.role);
         if (response.data.user.role.name === 'student') {
-          setUserParents(response.data.user.student.parents);
-          setUserStudentClass(response.data.user.student.student_class);
+          setUserParents(response.data.user.parents);
+          setUserStudentClass(response.data.user.student_class);
         } else if (response.data.user.role.name === 'parent') {
-          setUserChildren(response.data.user.parent.children);
+          setUserChildren(response.data.user.children);
         }
       })
       .catch(err => {
@@ -39,7 +39,7 @@ const UserProfile = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [params.userId]);
 
   if (loading) {
     return (
@@ -51,9 +51,8 @@ const UserProfile = () => {
     );
   }
 
-  // Если user === null, возвращаем компонент NotFound
   if (!user) {
-    return <Navigate to="/not-found" />;
+    return <NotFound />;
   }
 
   const formatBirthDate = birthDate => {
@@ -117,7 +116,7 @@ const UserProfile = () => {
               <div className="col-lg-3 col-12 mb-4">
                 <div className="card text-center text-dark">
                   <img
-                    src={'http://localhost:8000/' + user.avatar}
+                    src={'http://localhost:8000/' + user.user_data.avatar}
                     alt="avatar"
                     className="card-img-top"
                     style={{
@@ -130,7 +129,7 @@ const UserProfile = () => {
                   <div className="card-body">
                     <div className="card-title">
                       <h4>
-                        {user.name} {user.surname}
+                        {user.user_data.name} {user.user_data.surname}
                       </h4>
                     </div>
                     <p className="card-text"></p>
@@ -146,7 +145,8 @@ const UserProfile = () => {
                         <h6 className="mb-0">Полное имя</h6>
                       </div>
                       <div className="col-7 col-md-9">
-                        {user.surname} {user.name} {user.patronym}
+                        {user.user_data.surname} {user.user_data.name}{' '}
+                        {user.user_data.patronym}
                       </div>
                     </div>
                     <hr />
@@ -155,14 +155,14 @@ const UserProfile = () => {
                         <h6 className="mb-0">Дата рождения</h6>
                       </div>
 
-                      {user.birth_date === null ? (
+                      {user.user_data.birth_date === null ? (
                         <div className="col-7 col-md-9 text-muted">
                           нет данных
                         </div>
                       ) : (
                         <div className="col-7 col-md-9">
-                          {formatBirthDate(user.birth_date)} (
-                          {getAge(user.birth_date)})
+                          {formatBirthDate(user.user_data.birth_date)} (
+                          {getAge(user.user_data.birth_date)})
                         </div>
                       )}
                     </div>
@@ -171,24 +171,26 @@ const UserProfile = () => {
                       <div className="col-5 col-md-3">
                         <h6 className="mb-0">Почта</h6>
                       </div>
-                      <div className="col-7 col-md-9">{user.email}</div>
+                      <div className="col-7 col-md-9">
+                        {user.user_data.email}
+                      </div>
                     </div>
                     <hr />
                     <div className="row">
                       <div className="col-5 col-md-3">
                         <h6 className="mb-0">Номер телефона</h6>
                       </div>
-                      {user.phone_number === null ? (
+                      {user.user_data.phone_number === null ? (
                         <div className="col-7 col-md-9 text-muted">
                           нет данных
                         </div>
                       ) : (
                         <div className="col-7 col-md-9">
-                          {user.phone_number}
+                          {user.user_data.phone_number}
                         </div>
                       )}
                     </div>
-                    {user.role.name === 'student' && (
+                    {userRole.name === 'student' && (
                       <>
                         <hr />
                         <div className="row">
@@ -220,8 +222,8 @@ const UserProfile = () => {
                                     key={index}
                                     href={'/user/' + element.id}
                                   >
-                                    {element.user.surname} {element.user.name}{' '}
-                                    {element.user.patronym}
+                                    {element.surname} {element.name}{' '}
+                                    {element.patronym}
                                     <br />
                                   </a>
                                 ))}
@@ -231,7 +233,7 @@ const UserProfile = () => {
                         )}
                       </>
                     )}
-                    {user.role.name === 'parent' &&
+                    {userRole.name === 'parent' &&
                       userChildren.length !== 0 && (
                         <>
                           <hr />
@@ -246,8 +248,8 @@ const UserProfile = () => {
                                   key={index}
                                   href={'/user/' + element.id}
                                 >
-                                  {element.user.surname} {element.user.name}{' '}
-                                  {element.user.patronym}
+                                  {element.surname} {element.name}{' '}
+                                  {element.patronym}
                                   <br />
                                 </a>
                               ))}

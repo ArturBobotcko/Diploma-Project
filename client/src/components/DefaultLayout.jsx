@@ -8,7 +8,7 @@ import axiosClient from '../axios-client';
 const DefaultLayout = () => {
   const { user, isAuthorized, setIsAuthorized, setUser } = useStateContext();
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   const onLogout = event => {
     event.preventDefault();
@@ -33,13 +33,16 @@ const DefaultLayout = () => {
       .catch(err => {
         console.error(err);
         setIsAuthorized(false);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
 
   return (
     <div className="container-fluid bg-light p-0 d-flex flex-column min-vh-100">
-      {user ? (
-        <Navbar onLogout={onLogout} userId={user.id} />
+      {user && !loading ? (
+        <Navbar onLogout={onLogout} userId={user.user_data.id} />
       ) : (
         <Navbar onLogout={onLogout} />
       )}

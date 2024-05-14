@@ -12,10 +12,10 @@ const Settings = () => {
   const [avatar, setAvatar] = useState(null);
 
   useEffect(() => {
-    if (user.avatar) {
-      setAvatar('http://localhost:8000/' + user.avatar);
+    if (user.user_data) {
+      setAvatar('http://localhost:8000/' + user.user_data.avatar);
     }
-  }, [user.avatar]);
+  }, [user.user_data]);
 
   if (!user || Object.keys(user).length === 0) {
     return (
@@ -271,7 +271,7 @@ const Settings = () => {
                         </div>
                         <input
                           type="text"
-                          id="vk"
+                          id="tg"
                           className="form-control text-muted"
                           defaultValue={user.social_links.tg}
                         />
