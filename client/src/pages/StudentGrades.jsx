@@ -1,5 +1,6 @@
 import { useMemo, useState, useEffect } from 'react';
 import { useStateContext } from '../contexts/ContextProvider';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 const StudentGrades = () => {
   const { user } = useStateContext();
@@ -45,42 +46,55 @@ const StudentGrades = () => {
                   const avg = averages[index];
                   return (
                     <tr key={index}>
-                      <th scope="row">{index + 1}</th>
-                      <td>{element.name}</td>
+                      <th className="align-middle" scope="row">
+                        {index + 1}
+                      </th>
+                      <td className="align-middle">
+                        {element.discipline.name}
+                      </td>
                       <td>
                         <div className="d-flex gap-1 flex-row">
                           {element.grades.map((grade, gradeIndex) => (
-                            <div
+                            <OverlayTrigger
                               key={gradeIndex}
-                              className={
-                                'd-inline-block p-1 fw-bold text-white ' +
-                                (grade.grade_value <= 3
-                                  ? 'bg-danger'
-                                  : grade.grade_value === 4
-                                    ? 'bg-warning'
-                                    : 'bg-success')
+                              placement="bottom"
+                              overlay={
+                                <Tooltip>{`Тип оценки: ${grade.grade_type}, Комментарий: ${grade.comment}`}</Tooltip>
                               }
                             >
-                              {grade.grade_value}
-                            </div>
+                              <button
+                                type="button"
+                                className={
+                                  'p-1 fw-bold text-white btn ' +
+                                  (grade.grade_value <= 3
+                                    ? 'btn-danger'
+                                    : grade.grade_value === 4
+                                      ? 'btn-warning'
+                                      : 'btn-success')
+                                }
+                              >
+                                {grade.grade_value}
+                              </button>
+                            </OverlayTrigger>
                           ))}
                         </div>
                       </td>
                       <td></td>
                       <td>
                         <div className="d-flex gap-1 flex-row">
-                          <div
+                          <button
+                            type="button"
                             className={
-                              'd-inline-block p-1 fw-bold text-white ' +
-                              (avg <= 3.4
-                                ? 'bg-danger'
-                                : avg <= 4.4
-                                  ? 'bg-warning'
-                                  : 'bg-success')
+                              'p-1 fw-bold text-white btn ' +
+                              (avg <= 3
+                                ? 'btn-danger'
+                                : avg === 4
+                                  ? 'btn-warning'
+                                  : 'btn-success')
                             }
                           >
                             {avg}
-                          </div>
+                          </button>
                         </div>
                       </td>
                     </tr>

@@ -9,6 +9,7 @@ import GuestLayout from './components/GuestLayout';
 import UserProfile from './pages/UserProfile';
 import Settings from './pages/Settings';
 import GradesLayout from './components/GradesLayout';
+import GradeStudent from './pages/GradeStudent';
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
       {
         path: '/grades',
         element: <GradesLayout />,
+      },
+      {
+        path: '/grade-student/:studentId',
+        element: <GradeStudent />,
       },
       {
         path: '/user/:userId',

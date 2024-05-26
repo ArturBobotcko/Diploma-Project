@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Discipline;
 use App\Models\ParentModel;
 use App\Models\SocialLink;
 use App\Models\Student;
+use App\Models\StudentClass;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -125,19 +128,27 @@ class UserController extends Controller
                 $disciplines = $student_class->disciplines;
                 foreach ($disciplines as $discipline) {
                     $grades_data = [];
+
                     foreach ($user->student->grades()->where('discipline_id', $discipline->id)->get() as $grade) {
                         $grade_data = [
+                            "grade_type" => $grade->grade_type,
                             "grade_value" => $grade->grade_value,
+                            "comment" => $grade->comment,
                         ];
                         $grades_data[] = $grade_data;
                     }
 
                     $discipline_data = [
-                        "name" => $discipline->name,
+                        'id' => $discipline->id,
+                        'name' => $discipline->name,
+                    ];
+
+                    $discipline_grade_data = [
+                        "discipline" => $discipline_data,
                         "grades" => $grades_data,
                     ];
 
-                    $disciplines_data[] = $discipline_data;
+                    $disciplines_data[] = $discipline_grade_data;
                 }
             }
 
@@ -171,16 +182,23 @@ class UserController extends Controller
                     foreach ($child->grades()->where('discipline_id', $discipline->id)->get() as $grade) {
                         $grade_data = [
                             "grade_value" => $grade->grade_value,
+                            "grade_type" => $grade->grade_type,
+                            "comment" => $grade->comment,
                         ];
                         $grades_data[] = $grade_data;
                     }
 
                     $discipline_data = [
-                        "name" => $discipline->name,
+                        'id' => $discipline->id,
+                        'name' => $discipline->name,
+                    ];
+
+                    $discipline_grade_data = [
+                        "discipline" => $discipline_data,
                         "grades" => $grades_data,
                     ];
 
-                    $disciplines_data[] = $discipline_data;
+                    $disciplines_data[] = $discipline_grade_data;
                 }
 
                 $child_data = [
@@ -206,6 +224,57 @@ class UserController extends Controller
                     ]
                 ];
             }
+        }
+
+        if ($user->role->name === 'teacher')
+        {
+            $disciplines = $user->teacher->disciplines;
+            $disciplines_data = [];
+            $classes_data = [];
+            $teacher_disciplines = DB::table('teachers_disciplines')
+            ->where('teacher_id', $user->id)
+            ->get();
+
+            foreach ($teacher_disciplines as $teacher_discipline) {
+                $discipline = Discipline::find($teacher_discipline->discipline_id);
+                $discipline_data = [
+                    'id' => $discipline->id,
+                    'name' => $discipline->name,
+                ];
+
+                // Получаем классы, в которых учитель преподает данную дисциплину
+                $class_ids = DB::table('discipline_student_classes')
+                ->where('teacher_discipline_id', $teacher_discipline->id)
+                ->pluck('student_class_id');
+
+                $classes = StudentClass::whereIn('id', $class_ids)->get();
+                $class_data = [];
+
+                foreach ($classes as $class) {
+                    $class_data[] = [
+                        'id'=> $class->id,
+                        'number' => $class->number,
+                        'letter' => $class->letter,
+                    ];
+                }
+
+                $classes_data[] = [
+                    'discipline' => $discipline_data,
+                    'classes' => $class_data,
+                ];
+
+                $disciplines_data[] = $discipline_data;
+            }
+
+            $response_data = [
+                'user' => [
+                    'user_data' => $user_data,
+                    'role' => $role_data,
+                    'social_links' => $social_links_data,
+                    'disciplines' => $disciplines_data,
+                    'classes' => $classes_data,
+                ]
+            ];
         }
 
         return response()->json($response_data);

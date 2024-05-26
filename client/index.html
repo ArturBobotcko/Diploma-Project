@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -14,10 +14,19 @@
       integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
       crossorigin="anonymous"
     />
+
     <title></title>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script>
+      var tooltipList1 = [].slice.call(
+        document.querySelectorAll('[data-bs-toggle = "tooltip"]'),
+      );
+      var tooltipList2 = tooltipList1.map(function (tooltipTriggerfun) {
+        return new bootstrap.Tooltip(tooltipTriggerfun);
+      });
+    </script>
   </body>
 </html>

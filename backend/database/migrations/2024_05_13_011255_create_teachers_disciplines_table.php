@@ -11,16 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('grades', function (Blueprint $table) {
+        Schema::create('teachers_disciplines', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('student_id');
+            $table->unsignedBigInteger('teacher_id');
             $table->unsignedBigInteger('discipline_id');
-            $table->string('grade_type');
-            $table->integer('grade_value');
-            $table->string('comment');
             $table->timestamps();
 
-            $table->foreign('student_id')->references('id')->on('students');
+            $table->foreign('teacher_id')->references('id')->on('teachers');
             $table->foreign('discipline_id')->references('id')->on('disciplines');
         });
     }
@@ -30,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('grades');
+        Schema::dropIfExists('teachers_disciplines');
     }
 };
