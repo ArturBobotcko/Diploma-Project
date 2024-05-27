@@ -10,6 +10,8 @@ import UserProfile from './pages/UserProfile';
 import Settings from './pages/Settings';
 import GradesLayout from './components/GradesLayout';
 import GradeStudent from './pages/GradeStudent';
+import HomeworkLayout from './components/HomeworkLayout';
+import AnswerHomework from './pages/AnswerHomework';
 
 const router = createBrowserRouter([
   {
@@ -39,6 +41,14 @@ const router = createBrowserRouter([
       {
         path: '/settings',
         element: <Settings />,
+      },
+      {
+        path: '/homeworks',
+        element: <HomeworkLayout />,
+      },
+      {
+        path: '/answer-homework/:homeworkId',
+        element: <AnswerHomework />,
       },
     ],
   },

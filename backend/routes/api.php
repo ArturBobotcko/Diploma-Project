@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomeworkAssignmentController;
 use App\Http\Controllers\StudentClassController;
 use App\Http\Controllers\User\ParentController;
 use App\Http\Controllers\User\StudentController;
@@ -14,4 +15,6 @@ Route::middleware(["auth:sanctum"])->group(function () {
     Route::get("/user", [UserController::class,"getAuthUser"]);
     Route::get("/getStudentsFromClass/{id}", [StudentClassController::class,"getStudents"]);
     Route::post("/grade-student", [StudentController::class,"gradeStudent"]);
+    Route::get("/getStudentHomeworks/{id}", [StudentController::class,"getHomeworks"]);
+    Route::post("/answerStudentHomework/{id}", [HomeworkAssignmentController::class, "submit"]);
 });

@@ -104,4 +104,25 @@ class StudentController extends Controller
             return response()->json(['error' => 'Error saving grade: ' . $e->getMessage()], 500);
         }
     }
+
+    public function getHomeworks(string $studentId)
+    {
+        $student = Student::findOrFail($studentId);
+        $homeworks = $student->homeworks;
+        $homeworks_data = [];
+        foreach ($homeworks as $homework)
+        {
+            $homework_assigment = $homework->assigment;
+            $discipline = $homework->discipline;
+            $homework_data = [
+                'id' => $homework_assigment->id,
+                'discipline' => $discipline->name,
+                'description' => $homework->description,
+                'deadline' => $homework->deadline,
+                'completion_status' => $homework_assigment->completion_status,
+            ];
+            $homeworks_data[] = $homework_data;
+        }
+        return response()->json(["homeworks" => $homeworks_data],200);
+    }
 }
