@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Homework extends Model
@@ -18,13 +19,13 @@ class Homework extends Model
         "deadline"
     ];
 
-    public function assigment(): HasOne
+    public function assignment(): HasOne
     {
         return $this->hasOne(HomeworkAssigment::class);
     }
 
-    public function discipline(): HasOne
+    public function discipline(): BelongsTo
     {
-        return $this->hasOne(Discipline::class, "id");
+        return $this->belongsTo(Discipline::class, "discipline_id");
     }
 }

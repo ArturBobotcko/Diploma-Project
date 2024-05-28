@@ -88,9 +88,3 @@ class User extends Authenticatable
         return $this->hasOne(Teacher::class, 'id');
     }
 }
-
-/**
- * TODO: Разобраться со связями
- * Сделать так, чтобы User мог получить либо детей, либо родителей, а также
- * класс обучения
- */

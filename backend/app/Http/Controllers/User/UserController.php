@@ -70,9 +70,9 @@ class UserController extends Controller
         //
     }
 
-    public function getUserById(string $id)
+    public function getUserById(string $userId)
     {
-        $user = User::find($id);
+        $user = User::find($userId);
         if ($user === null) {
             return response()->json(["message"=> "Unknown user"],404);
         }
@@ -293,5 +293,24 @@ class UserController extends Controller
         $filepath = $request->file('file')->store('avatars');
         $user->update(['avatar'=> $filepath]);
         $user->save();
+    }
+
+    public function getDisciplines(string $studentId)
+    {
+        $student = Student::find($studentId);
+        if (!$student) {
+            return response()->json([], 404);
+        }
+        $studentClass = $student->studentClass;
+        $disciplines = $studentClass->disciplines;
+        $disciplines_data = [];
+        foreach ($disciplines as $discipline) {
+            $discipline_data = [
+                'id' => $discipline->id,
+                'name' => $discipline->name,
+            ];
+            $disciplines_data[] = $discipline_data;
+        }
+        return response()->json(["disciplines" => $disciplines_data]);
     }
 }

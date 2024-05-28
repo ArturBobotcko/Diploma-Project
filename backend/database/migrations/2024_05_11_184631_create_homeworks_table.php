@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('discipline_id');
             $table->string('description');
-            $table->date('deadline');
+            $table->timestamp('deadline');
             $table->timestamps();
 
             $table->foreign('discipline_id')->references('id')->on('disciplines');

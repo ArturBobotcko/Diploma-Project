@@ -63,9 +63,9 @@ class StudentClassController extends Controller
         //
     }
 
-    public function getStudents(string $student_class_id)
+    public function getStudents(string $studentClassId)
     {
-        $studentClass = StudentClass::find($student_class_id);
+        $studentClass = StudentClass::find($studentClassId);
         $students = $studentClass->students;
         $students_data = [];
         foreach ($students as $student) {

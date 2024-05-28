@@ -88,8 +88,6 @@ class StudentController extends Controller
 
         try {
             $user = User::findOrFail($studentId);
-            $studentClass = $user->student->studentClass;
-            // $studentClass->disciplines()->findOrFail($disciplineId);
 
             $grade = new Grade();
             $grade->student_id = $studentId;
@@ -105,24 +103,37 @@ class StudentController extends Controller
         }
     }
 
-    public function getHomeworks(string $studentId)
+    public function getHomeworks(Request $request, string $studentId)
     {
         $student = Student::findOrFail($studentId);
-        $homeworks = $student->homeworks;
+        $disciplineId = $request->query('discipline');
+
+        // Получаем задания студента с учетом фильтрации по дисциплине
+        $query = $student->homeworks()->with(['assignment', 'discipline']);
+
+        if ($disciplineId) {
+            $query->where('discipline_id', $disciplineId);
+        }
+        $homeworks = $query->get();
+        // dd($homeworks);
+        // Формируем ответ
         $homeworks_data = [];
-        foreach ($homeworks as $homework)
-        {
-            $homework_assigment = $homework->assigment;
+        foreach ($homeworks as $homework) {
+            // dd($homework);
+            $homework_assignment = $homework->assignment;
             $discipline = $homework->discipline;
+            // dd($homework_assignment, $discipline);
             $homework_data = [
-                'id' => $homework_assigment->id,
+                'id' => $homework_assignment->id,
                 'discipline' => $discipline->name,
                 'description' => $homework->description,
                 'deadline' => $homework->deadline,
-                'completion_status' => $homework_assigment->completion_status,
+                'completion_status' => $homework_assignment->completion_status,
             ];
             $homeworks_data[] = $homework_data;
         }
-        return response()->json(["homeworks" => $homeworks_data],200);
+
+        return response()->json(["homeworks" => $homeworks_data], 200);
     }
+
 }

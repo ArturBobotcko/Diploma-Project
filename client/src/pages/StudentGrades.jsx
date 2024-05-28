@@ -82,19 +82,21 @@ const StudentGrades = () => {
                       <td></td>
                       <td>
                         <div className="d-flex gap-1 flex-row">
-                          <button
-                            type="button"
-                            className={
-                              'p-1 fw-bold text-white btn ' +
-                              (avg <= 3
-                                ? 'btn-danger'
-                                : avg === 4
-                                  ? 'btn-warning'
-                                  : 'btn-success')
-                            }
-                          >
-                            {avg}
-                          </button>
+                          {!isNaN(avg) && (
+                            <button
+                              type="button"
+                              className={
+                                'p-1 fw-bold text-white btn ' +
+                                (avg <= 3
+                                  ? 'btn-danger'
+                                  : avg === 4
+                                    ? 'btn-warning'
+                                    : 'btn-success')
+                              }
+                            >
+                              {avg}
+                            </button>
+                          )}
                         </div>
                       </td>
                     </tr>
