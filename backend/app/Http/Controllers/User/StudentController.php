@@ -105,34 +105,44 @@ class StudentController extends Controller
 
     public function getHomeworks(Request $request, string $studentId)
     {
+        // Получаем студента или возвращаем 404 ошибку
         $student = Student::findOrFail($studentId);
-        $disciplineId = $request->query('discipline');
 
-        // Получаем задания студента с учетом фильтрации по дисциплине
-        $query = $student->homeworks()->with(['assignment', 'discipline']);
+        // Получаем значение teacher_discipline_id из запроса
+        $teacherDisciplineId = $request->query('teacher_discipline');
 
-        if ($disciplineId) {
-            $query->where('discipline_id', $disciplineId);
+        // Формируем запрос на получение домашних заданий студента с нужными зависимостями
+        $query = $student->homeworks()->with(['assignment', 'discipline.discipline']);
+
+        // Фильтрация по teacher_discipline_id, если значение передано
+        if ($teacherDisciplineId) {
+            $query->where('teacher_discipline_id', $teacherDisciplineId);
         }
+
+        // Получаем отфильтрованные домашние задания
         $homeworks = $query->get();
-        // dd($homeworks);
+
         // Формируем ответ
         $homeworks_data = [];
         foreach ($homeworks as $homework) {
-            // dd($homework);
             $homework_assignment = $homework->assignment;
-            $discipline = $homework->discipline;
-            // dd($homework_assignment, $discipline);
-            $homework_data = [
-                'id' => $homework_assignment->id,
-                'discipline' => $discipline->name,
-                'description' => $homework->description,
-                'deadline' => $homework->deadline,
-                'completion_status' => $homework_assignment->completion_status,
-            ];
-            $homeworks_data[] = $homework_data;
+            $teacher_discipline = $homework->discipline;
+            $discipline = $teacher_discipline ? $teacher_discipline->discipline : null;
+
+            // Проверяем наличие дисциплины
+            if ($discipline) {
+                $homework_data = [
+                    'id' => $homework->id,
+                    'discipline' => $discipline->name,
+                    'description' => $homework->description,
+                    'deadline' => $homework->deadline,
+                    'completion_status' => $homework_assignment->completion_status,
+                ];
+                $homeworks_data[] = $homework_data;
+            }
         }
 
+        // Возвращаем JSON ответ с данными домашних заданий
         return response()->json(["homeworks" => $homeworks_data], 200);
     }
 

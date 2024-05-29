@@ -24,7 +24,7 @@ class StudentClass extends Model
         return $this->belongsToMany(Discipline::class, 'discipline_student_classes', 'student_class_id', 'teacher_discipline_id')
                     ->join('teachers_disciplines as td', 'discipline_student_classes.teacher_discipline_id', '=', 'td.id')
                     ->join('disciplines as d', 'td.discipline_id', '=', 'd.id')
-                    ->select('d.*');
+                    ->select('d.*', 'discipline_student_classes.teacher_discipline_id');
     }
 
     public function students(): HasMany

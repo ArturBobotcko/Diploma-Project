@@ -31,7 +31,7 @@ const TeacherGrades = () => {
     setSelectedClassId(studentClassId);
     if (studentClassId != null) {
       axiosClient
-        .get(`/getStudentsFromClass/${studentClassId}`)
+        .get(`/api/getStudentsFromClass/${studentClassId}`)
         .then(response => {
           setStudentsInClass(response.data.students);
         });
@@ -45,10 +45,10 @@ const TeacherGrades = () => {
   };
 
   return (
-    <div className="container mt-4">
+    <div className="container">
       <div className="card">
         <div className="card-header">
-          <h5 className="card-title">Выставление оценок ученикам</h5>
+          <h5 className="card-title m-0">Выставление оценок ученикам</h5>
         </div>
         <div className="card-body">
           <div className="row">

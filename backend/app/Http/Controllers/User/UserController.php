@@ -305,12 +305,19 @@ class UserController extends Controller
         $disciplines = $studentClass->disciplines;
         $disciplines_data = [];
         foreach ($disciplines as $discipline) {
+            $teacherDisciplineId = $discipline->pivot->teacher_discipline_id;
             $discipline_data = [
+                'teacher_discipline_id' => $teacherDisciplineId,
                 'id' => $discipline->id,
                 'name' => $discipline->name,
             ];
             $disciplines_data[] = $discipline_data;
         }
-        return response()->json(["disciplines" => $disciplines_data]);
+
+        foreach ($disciplines as $discipline) {
+            $discipline->makeHidden('pivot');
+        }
+
+        return response()->json(["disciplines" => $disciplines]);
     }
 }

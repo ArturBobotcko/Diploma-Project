@@ -77,20 +77,30 @@ const AnswerHomework = () => {
       remainingTime = new Date(deadline) - currentTime;
     } else {
       const updateTime = new Date(update);
-      remainingTime = new Date(deadline) - updateTime;
+      const deadlineTime = new Date(deadline);
+      remainingTime = deadlineTime - updateTime;
     }
 
-    let days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
-    let hours = Math.floor(
-      (remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
-    );
-    if (days < 0) {
-      days *= -1;
+    // Вычисляем дни, часы, минуты и секунды
+    let seconds = Math.floor(remainingTime / 1000);
+    if (seconds < 0) {
+      seconds *= -1;
     }
-    if (hours < 0) {
-      hours *= -1;
+    let minutes = Math.floor(seconds / 60);
+    let hours = Math.floor(minutes / 60);
+    let days = Math.floor(hours / 24);
+
+    // Форматируем текст оставшегося времени
+    let remainingTimeText;
+    if (days === 0) {
+      if (hours === 0) {
+        remainingTimeText = `${minutes % 60} мин.`;
+      } else {
+        remainingTimeText = `${hours % 24} час. ${minutes % 60} мин.`;
+      }
+    } else {
+      remainingTimeText = `${days} дн. ${hours % 24} час. ${minutes % 60} мин.`;
     }
-    const remainingTimeText = `${days} дн. ${hours} час.`;
 
     return {
       remainingTimeText,
@@ -151,20 +161,28 @@ const AnswerHomework = () => {
                 <tr>
                   <th className="ps-1">Оставшееся время</th>
                   {homework.completion_status === 0 ? (
-                    <td>{remainingTimeText}</td>
+                    isLate ? (
+                      <td>
+                        Ответ просрочен на <br />
+                        {remainingTimeText}
+                      </td>
+                    ) : (
+                      <td>{remainingTimeText}</td>
+                    )
                   ) : isLate ? (
                     <td className="bg-danger text-white">
-                      Ответ отправлен с опозданием на <br /> {remainingTimeText}
+                      Ответ отправлен с опозданием на <br />
+                      {remainingTimeText}
                     </td>
                   ) : (
                     <td className="bg-success text-white">
-                      Ответ отправлен заранее на <br /> {remainingTimeText}
+                      Ответ отправлен заранее на <br />
+                      {remainingTimeText}
                     </td>
                   )}
                 </tr>
                 <tr>
                   <th className="ps-1">Последнее изменение</th>
-                  {/* <td>{formatDate(homework.updated_at)}</td> */}
                   {homework.updated_at === null ? (
                     <td>Нет изменений</td>
                   ) : (

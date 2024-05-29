@@ -43,4 +43,33 @@ class HomeworkAssignmentController extends Controller
         $homeworkAssignment->save();
         return response()->json(['message' => 'Homework completely saved']);
     }
+
+    public function assignHomework(Request $request)
+    {
+        $validatedData = $request->validate([
+            'teacher_id' => 'required|integer|exists:teachers,id',
+            'discipline_id' => 'required|integer|exists:disciplines,id',
+            'description' => 'required|string|max:255',
+            'deadline' => 'required|date',
+        ]);
+
+        $homeworkController = new HomeworkController();
+        $homeworkId = $homeworkController->createHomework(
+            $validatedData['teacher_id'],
+            $validatedData['discipline_id'],
+            $validatedData['description'],
+            $validatedData['deadline'],
+        );
+
+        foreach($request->input('students') as $studentId)
+        {
+            $homeworkAssignment = new HomeworkAssigment();
+            $homeworkAssignment->homework_id = $homeworkId;
+            $homeworkAssignment->student_id = $studentId;
+            $homeworkAssignment->completion_status = 0;
+            $homeworkAssignment->save();
+        }
+
+        return response()->json([],200);
+    }
 }

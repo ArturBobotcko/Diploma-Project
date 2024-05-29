@@ -9,7 +9,8 @@ const StudentHomework = () => {
   const { user } = useStateContext();
   const [homeworks, setHomeworks] = useState([]);
   const [disciplines, setDisciplines] = useState([]);
-  const [selectedDiscipline, setSelectedDiscipline] = useState(null);
+  const [selectedTeacherDiscipline, setSelectedTeacherDiscipline] =
+    useState(null);
   const [selectedDisciplineName, setSelectedDisciplineName] = useState('');
   const navigate = useNavigate();
 
@@ -22,19 +23,19 @@ const StudentHomework = () => {
   }, [user.user_data.id]);
 
   useEffect(() => {
-    if (selectedDiscipline) {
+    if (selectedTeacherDiscipline) {
       axiosClient
         .get(
-          `/api/getStudentHomeworks/${user.user_data.id}?discipline=${selectedDiscipline}`,
+          `/api/getStudentHomeworks/${user.user_data.id}?teacher_discipline=${selectedTeacherDiscipline}`,
         )
         .then(response => {
           setHomeworks(response.data.homeworks);
         });
     }
-  }, [selectedDiscipline, user.user_data.id]);
+  }, [selectedTeacherDiscipline, user.user_data.id]);
 
   const handleDisciplineClick = (disciplineId, disciplineName) => {
-    setSelectedDiscipline(disciplineId);
+    setSelectedTeacherDiscipline(disciplineId);
     setSelectedDisciplineName(disciplineName);
   };
 
@@ -103,7 +104,7 @@ const StudentHomework = () => {
 
   return (
     <div className="container">
-      {!selectedDiscipline ? (
+      {!selectedTeacherDiscipline ? (
         <div className="card mb-3">
           <div className="card-body">
             <h2 className="text-dark">Выберите дисциплину</h2>
@@ -114,7 +115,10 @@ const StudentHomework = () => {
                   className="list-group-item list-group-item-action"
                   style={{ cursor: 'pointer' }}
                   onClick={() =>
-                    handleDisciplineClick(discipline.id, discipline.name)
+                    handleDisciplineClick(
+                      discipline.teacher_discipline_id,
+                      discipline.name,
+                    )
                   }
                 >
                   {discipline.name}

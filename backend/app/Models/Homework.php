@@ -26,6 +26,6 @@ class Homework extends Model
 
     public function discipline(): BelongsTo
     {
-        return $this->belongsTo(Discipline::class, "discipline_id");
+        return $this->belongsTo(TeacherDiscipline::class, 'teacher_discipline_id', 'id')->with('discipline');
     }
 }
