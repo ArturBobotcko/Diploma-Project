@@ -26,7 +26,7 @@ class HomeworkAssignmentController extends Controller
         return response()->json(["homework" => $homework_data]);
     }
 
-    public function submit(Request $request, $homeworkAssignmentId)
+    public function submit(Request $request, $homeworkId)
     {
         $request->validate([
             'response_text' => 'nullable|string',
@@ -34,7 +34,8 @@ class HomeworkAssignmentController extends Controller
             'done_at' => 'timestamp'
         ]);
 
-        $homeworkAssignment = HomeworkAssigment::findOrFail($homeworkAssignmentId);
+        $studentId = $request->query('student_id');
+        $homeworkAssignment = HomeworkAssigment::where('homework_id', $homeworkId)->where('student_id', $studentId)->first();
         $responseTextChanged = $homeworkAssignment->response_text !== $request->input('response_text');
         $fileChanged = $request->hasFile('file');
 

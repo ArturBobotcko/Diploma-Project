@@ -44,7 +44,7 @@ const AnswerHomework = () => {
 
     try {
       const response = await axiosClient.post(
-        `/api/answerStudentHomework/${homeworkId}`,
+        `/api/answerStudentHomework/${homeworkId}?student_id=${user.user_data.id}`,
         formData,
       );
       if (response.status === 200) {
@@ -132,8 +132,6 @@ const AnswerHomework = () => {
       </div>
     );
   }
-
-  console.log(new Date());
 
   return (
     <div className="container mt-4">
