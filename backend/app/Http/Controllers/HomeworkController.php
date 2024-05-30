@@ -20,7 +20,7 @@ class HomeworkController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function createHomework($teacherId, $disciplineId, $description, $deadline)
+    public function createHomework($teacherId, $disciplineId, $studentClassId, $description, $deadline)
     {
         $homework = new Homework();
         $teacherDiscipline = DB::table('teachers_disciplines')
@@ -28,6 +28,7 @@ class HomeworkController extends Controller
             ->where('discipline_id', $disciplineId)
             ->first();
         $homework->teacher_discipline_id = $teacherDiscipline->id;
+        $homework->student_class_id = $studentClassId;
         $homework->description = $description;
         $homework->deadline = $deadline;
         $homework->save();
@@ -81,7 +82,7 @@ class HomeworkController extends Controller
         $disciplineId = $request->query('discipline_id');
         $teacherDisciplineId = TeacherDiscipline::where('teacher_id', $teacherId)->where('discipline_id', $disciplineId)->first()->id;
         if ($teacherDisciplineId) {
-            $homeworks = Homework::where('teacher_discipline_id', $teacherDisciplineId)->get();
+            $homeworks = Homework::where('teacher_discipline_id', $teacherDisciplineId)->where('student_class_id', $studentClassId)->get();
             $homeworks_data = [];
             foreach($homeworks as $homework) {
                 $homework_data = [

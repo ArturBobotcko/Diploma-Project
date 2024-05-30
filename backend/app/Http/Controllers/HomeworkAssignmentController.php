@@ -4,14 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Homework;
 use App\Models\HomeworkAssigment;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class HomeworkAssignmentController extends Controller
 {
-    public function index(string $homeworkId)
+    public function index(Request $request, string $homeworkId)
     {
         $homework = Homework::findOrFail($homeworkId);
-        $homeworkAssignmnet = $homework->assignment;
+        $studentId = $request->query('student_id');
+        $homeworkAssignmnet = $homework->assignment->where('student_id', $studentId)->first();
         $homework_data = [
             "id" => $homework->id,
             "description" => $homework->description,
@@ -19,7 +21,7 @@ class HomeworkAssignmentController extends Controller
             "completion_status" => $homeworkAssignmnet->completion_status,
             "response_text" => $homeworkAssignmnet->response_text,
             "file_path" => $homeworkAssignmnet->file_path,
-            "updated_at" => $homeworkAssignmnet->updated_at,
+            "done_at" => $homeworkAssignmnet->done_at,
         ];
         return response()->json(["homework" => $homework_data]);
     }
@@ -29,20 +31,30 @@ class HomeworkAssignmentController extends Controller
         $request->validate([
             'response_text' => 'nullable|string',
             'file' => 'nullable|file|mimes:pdf,doc,docx,txt,jpg,png',
+            'done_at' => 'timestamp'
         ]);
 
         $homeworkAssignment = HomeworkAssigment::findOrFail($homeworkAssignmentId);
+        $responseTextChanged = $homeworkAssignment->response_text !== $request->input('response_text');
+        $fileChanged = $request->hasFile('file');
+
+        if ($responseTextChanged || $fileChanged) {
+            $homeworkAssignment->done_at = Carbon::now('Europe/Moscow');
+        }
+
         $homeworkAssignment->response_text = $request->input('response_text');
 
-        if ($request->hasFile('file')) {
+        if ($fileChanged) {
             $filePath = $request->file('file')->store('homework_files');
             $homeworkAssignment->file_path = $filePath;
         }
 
         $homeworkAssignment->completion_status = 1;
         $homeworkAssignment->save();
-        return response()->json(['message' => 'Homework completely saved']);
+
+        return response()->json(['message' => 'Homework successfully saved']);
     }
+
 
     public function assignHomework(Request $request)
     {
@@ -51,12 +63,14 @@ class HomeworkAssignmentController extends Controller
             'discipline_id' => 'required|integer|exists:disciplines,id',
             'description' => 'required|string|max:255',
             'deadline' => 'required|date',
+            'student_class_id' => 'required|integer|exists:student_classes,id',
         ]);
 
         $homeworkController = new HomeworkController();
         $homeworkId = $homeworkController->createHomework(
             $validatedData['teacher_id'],
             $validatedData['discipline_id'],
+            $validatedData['student_class_id'],
             $validatedData['description'],
             $validatedData['deadline'],
         );

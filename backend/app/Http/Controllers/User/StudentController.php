@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Grade;
+use App\Models\Homework;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -107,43 +108,41 @@ class StudentController extends Controller
     {
         // Получаем студента или возвращаем 404 ошибку
         $student = Student::findOrFail($studentId);
+        $studentClassId = $student->studentClass->id;
 
         // Получаем значение teacher_discipline_id из запроса
         $teacherDisciplineId = $request->query('teacher_discipline');
 
-        // Формируем запрос на получение домашних заданий студента с нужными зависимостями
-        $query = $student->homeworks()->with(['assignment', 'discipline.discipline']);
-
-        // Фильтрация по teacher_discipline_id, если значение передано
-        if ($teacherDisciplineId) {
-            $query->where('teacher_discipline_id', $teacherDisciplineId);
-        }
-
-        // Получаем отфильтрованные домашние задания
-        $homeworks = $query->get();
+        // Формируем запрос на получение домашних заданий по student_class_id и teacher_discipline_id
+        $homeworks = Homework::where('student_class_id', $studentClassId)
+            ->where('teacher_discipline_id', $teacherDisciplineId)
+            ->get();
 
         // Формируем ответ
         $homeworks_data = [];
         foreach ($homeworks as $homework) {
-            $homework_assignment = $homework->assignment;
-            $teacher_discipline = $homework->discipline;
-            $discipline = $teacher_discipline ? $teacher_discipline->discipline : null;
+            // Получаем назначения домашнего задания для данного студента
+            $homework_assignments = $homework->assignment->where('student_id', $studentId);
 
-            // Проверяем наличие дисциплины
-            if ($discipline) {
-                $homework_data = [
-                    'id' => $homework->id,
-                    'discipline' => $discipline->name,
-                    'description' => $homework->description,
-                    'deadline' => $homework->deadline,
-                    'completion_status' => $homework_assignment->completion_status,
-                ];
-                $homeworks_data[] = $homework_data;
+            foreach ($homework_assignments as $homework_assignment) {
+                $teacher_discipline = $homework->discipline;
+                $discipline = $teacher_discipline ? $teacher_discipline->discipline : null;
+
+                // Проверяем наличие дисциплины
+                if ($discipline) {
+                    $homework_data = [
+                        'id' => $homework->id,
+                        'discipline' => $discipline->name,
+                        'description' => $homework->description,
+                        'deadline' => $homework->deadline,
+                        'completion_status' => $homework_assignment->completion_status,
+                    ];
+                    $homeworks_data[] = $homework_data;
+                }
             }
         }
 
         // Возвращаем JSON ответ с данными домашних заданий
         return response()->json(["homeworks" => $homeworks_data], 200);
     }
-
 }

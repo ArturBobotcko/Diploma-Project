@@ -12,6 +12,7 @@ import GradesLayout from './components/GradesLayout';
 import GradeStudent from './pages/GradeStudent';
 import HomeworkLayout from './components/HomeworkLayout';
 import AnswerHomework from './pages/AnswerHomework';
+import CheckHomework from './pages/CheckHomework';
 
 const router = createBrowserRouter([
   {
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
       {
         path: '/answer-homework/:homeworkId',
         element: <AnswerHomework />,
+      },
+      {
+        path: '/check-homework/:homeworkId',
+        element: <CheckHomework />,
       },
     ],
   },

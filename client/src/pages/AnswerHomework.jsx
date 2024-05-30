@@ -3,26 +3,33 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axiosClient from '../axios-client';
 import { ru } from 'date-fns/locale';
 import { formatInTimeZone } from 'date-fns-tz';
+import { useStateContext } from '../contexts/ContextProvider';
 
 const AnswerHomework = () => {
   const { homeworkId } = useParams();
+  const { user } = useStateContext();
   const [responseText, setResponseText] = useState('');
   const [file, setFile] = useState(null);
-  const [fileURL, setFileURL] = useState(null); // Add state to hold the file URL
+  const [fileURL, setFileURL] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [homework, setHomework] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
-    axiosClient.get(`/api/getHomework/${homeworkId}`).then(response => {
-      setHomework(response.data.homework);
-      setResponseText(response.data.homework.response_text || '');
-      if (response.data.homework.file_path) {
-        setFileURL('http://localhost:8000/' + response.data.homework.file_path); // Update the file URL state
-      }
-    });
-  }, [homeworkId]);
+    axiosClient
+      .get(`/api/getHomework/${homeworkId}?student_id=${user.user_data.id}`)
+      .then(response => {
+        setHomework(response.data.homework);
+        const responseText = response.data.homework.response_text || '';
+        setResponseText(responseText);
+        if (response.data.homework.file_path) {
+          const fileURL =
+            'http://localhost:8000/' + response.data.homework.file_path;
+          setFileURL(fileURL);
+        }
+      });
+  }, [homeworkId, user.user_data.id]);
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -81,7 +88,6 @@ const AnswerHomework = () => {
       remainingTime = deadlineTime - updateTime;
     }
 
-    // Вычисляем дни, часы, минуты и секунды
     let seconds = Math.floor(remainingTime / 1000);
     if (seconds < 0) {
       seconds *= -1;
@@ -90,7 +96,6 @@ const AnswerHomework = () => {
     let hours = Math.floor(minutes / 60);
     let days = Math.floor(hours / 24);
 
-    // Форматируем текст оставшегося времени
     let remainingTimeText;
     if (days === 0) {
       if (hours === 0) {
@@ -112,7 +117,7 @@ const AnswerHomework = () => {
     return calculateRemainingTime(
       homework.completion_status,
       homework.deadline,
-      homework.updated_at,
+      homework.done_at,
     );
   };
 
@@ -127,6 +132,8 @@ const AnswerHomework = () => {
       </div>
     );
   }
+
+  console.log(new Date());
 
   return (
     <div className="container mt-4">
@@ -183,10 +190,10 @@ const AnswerHomework = () => {
                 </tr>
                 <tr>
                   <th className="ps-1">Последнее изменение</th>
-                  {homework.updated_at === null ? (
+                  {homework.done_at === null ? (
                     <td>Нет изменений</td>
                   ) : (
-                    <td>{formatDate(homework.updated_at)}</td>
+                    <td>{formatDate(homework.done_at)}</td>
                   )}
                 </tr>
                 <tr>

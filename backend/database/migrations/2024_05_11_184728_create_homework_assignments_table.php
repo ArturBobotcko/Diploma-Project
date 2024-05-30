@@ -14,9 +14,13 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('homework_id');
             $table->unsignedBigInteger('student_id');
-            $table->boolean('completion_status');
+            $table->boolean('completion_status')->default(0);
             $table->text('response_text')->nullable();
             $table->string('file_path')->nullable();
+            $table->boolean('checked')->default(0);
+            $table->string('teacher_note')->nullable();
+            $table->timestamp('checked_at')->nullable();
+            $table->timestamp('done_at')->nullable();
             $table->timestamps();
 
             $table->foreign('homework_id')->references('id')->on('homeworks');

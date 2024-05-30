@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Homework extends Model
@@ -14,14 +15,15 @@ class Homework extends Model
     protected $table = "homeworks";
     protected $primaryKey = "id";
     protected $fillable = [
-        "discipline_id",
+        "teacher_discipline_id",
+        "student_class_id",
         "desription",
         "deadline"
     ];
 
-    public function assignment(): HasOne
+    public function assignment(): HasMany
     {
-        return $this->hasOne(HomeworkAssigment::class);
+        return $this->hasMany(HomeworkAssigment::class);
     }
 
     public function discipline(): BelongsTo

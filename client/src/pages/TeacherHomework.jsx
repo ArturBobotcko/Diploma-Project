@@ -1,13 +1,18 @@
 import { useEffect, useState } from 'react';
 import { useStateContext } from '../contexts/ContextProvider';
 import axiosClient from '../axios-client';
-import HomeworkCard from './HomeworkCard';
+import { useNavigate } from 'react-router-dom';
+import { ru } from 'date-fns/locale';
+import { formatInTimeZone } from 'date-fns-tz';
 
 const TeacherHomework = () => {
   const { user } = useStateContext();
   const [selectedDiscipline, setSelectedDiscipline] = useState('');
+  const [selectedCheckDiscipline, setSelectedCheckDiscipline] = useState('');
   const [selectedClassId, setSelectedClassId] = useState(null);
+  const [selectedCheckClassId, setSelectedCheckClassId] = useState(null);
   const [filteredClasses, setFilteredClasses] = useState([]);
+  const [filteredCheckClasses, setFilteredCheckClasses] = useState([]);
   const [studentsInClass, setStudentsInClass] = useState([]);
   const [isIndividual, setIsIndividual] = useState(false);
   const [description, setDescription] = useState('');
@@ -15,30 +20,64 @@ const TeacherHomework = () => {
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [assignedHomeworks, setAssignedHomeworks] = useState([]);
+  const navigate = useNavigate();
+
+  const formatDate = date => {
+    try {
+      const zonedDate = formatInTimeZone(
+        new Date(date),
+        'Europe/Moscow',
+        'dd MMMM yyyy, HH:mm',
+        { locale: ru },
+      );
+      return zonedDate;
+    } catch (error) {
+      console.error('Invalid date format:', date);
+      return 'Некорректная дата';
+    }
+  };
 
   const handleDisciplineChange = event => {
     const disciplineId = parseInt(event.target.value, 10);
-    setSelectedDiscipline(disciplineId);
-
-    // Фильтруем классы в зависимости от выбранной дисциплины
-    const selectedClasses = user.classes.find(
-      element => element.discipline.id === disciplineId,
-    );
-    if (selectedClasses) {
-      setFilteredClasses(selectedClasses.classes);
-    } else {
-      setFilteredClasses([]);
+    if (event.target.id === 'disciplineCheckSelect') {
+      setSelectedCheckDiscipline(disciplineId);
+      const selectedClasses = user.classes.find(
+        element => element.discipline.id === disciplineId,
+      );
+      if (selectedClasses) {
+        setFilteredCheckClasses(selectedClasses.classes);
+      } else {
+        setFilteredCheckClasses([]);
+      }
+    } else if (event.target.id === 'disciplineSelect') {
+      setSelectedDiscipline(disciplineId);
+      // Фильтруем классы в зависимости от выбранной дисциплины
+      const selectedClasses = user.classes.find(
+        element => element.discipline.id === disciplineId,
+      );
+      if (selectedClasses) {
+        setFilteredClasses(selectedClasses.classes);
+      } else {
+        setFilteredClasses([]);
+      }
     }
   };
 
   const handleClassChange = event => {
     const studentClassId = parseInt(event.target.value, 10);
-    setSelectedClassId(studentClassId);
+    if (event.target.id === 'classCheckSelect') {
+      setSelectedCheckClassId(studentClassId);
+    } else if (event.target.id === 'classSelect') {
+      setSelectedClassId(studentClassId);
+    }
+
     if (studentClassId != null) {
       axiosClient
         .get(`/api/getStudentsFromClass/${studentClassId}`)
         .then(response => {
-          setStudentsInClass(response.data.students);
+          if (event.target.id === 'classSelect') {
+            setStudentsInClass(response.data.students);
+          }
         });
     }
   };
@@ -96,18 +135,51 @@ const TeacherHomework = () => {
       });
   };
 
+  const handleOnCheckHomeworkClick = homeworkId => {
+    navigate(`/check-homework/${homeworkId}`);
+  };
+
   const renderAssignedHomeworks = () => {
-    return assignedHomeworks.map(homework => (
-      <HomeworkCard key={homework.id} homework={homework} />
-    ));
+    const sortedHomeworks = [...assignedHomeworks].sort(
+      (a, b) => new Date(a.deadline) - new Date(b.deadline),
+    );
+
+    return (
+      <table className="table table-bordered m-0">
+        <thead>
+          <tr>
+            <th>Задание</th>
+            <th>Дата сдачи</th>
+            <th>Статус</th>
+          </tr>
+        </thead>
+        <tbody>
+          {sortedHomeworks.map(homework => (
+            <tr
+              key={homework.id}
+              onClick={() => handleOnCheckHomeworkClick(homework.id)}
+              style={{ cursor: 'pointer' }}
+            >
+              <td>{homework.description}</td>
+              <td>{formatDate(homework.deadline)}</td>
+              <td>
+                {new Date(homework.deadline) < new Date()
+                  ? 'Просрочено'
+                  : 'Активно'}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    );
   };
 
   useEffect(() => {
     const loadAssignedHomeworks = () => {
-      if (selectedClassId && selectedDiscipline) {
+      if (selectedCheckClassId && selectedCheckDiscipline) {
         axiosClient
           .get(
-            `/api/getAssignedHomeworks/${selectedClassId}?teacher_id=${user.user_data.id}&discipline_id=${selectedDiscipline}`,
+            `/api/getAssignedHomeworks/${selectedCheckClassId}?teacher_id=${user.user_data.id}&discipline_id=${selectedCheckDiscipline}`,
           )
           .then(response => {
             setAssignedHomeworks(response.data.homeworks);
@@ -115,7 +187,7 @@ const TeacherHomework = () => {
       }
     };
     loadAssignedHomeworks();
-  }, [selectedClassId, selectedDiscipline, user.user_data.id]);
+  }, [selectedCheckClassId, selectedCheckDiscipline, user.user_data.id]);
 
   return (
     <div className="container">
@@ -145,7 +217,7 @@ const TeacherHomework = () => {
                 ))}
               </select>
             </div>
-            {selectedDiscipline && (
+            {!isNaN(selectedDiscipline) && selectedDiscipline && (
               <div className="col-md-6 mb-3">
                 <label htmlFor="classSelect" className="form-label">
                   Выберите класс
@@ -166,7 +238,7 @@ const TeacherHomework = () => {
               </div>
             )}
           </div>
-          {selectedClassId && (
+          {!isNaN(selectedClassId) && selectedClassId && (
             <>
               <div className="mb-3">
                 <div className="form-check">
@@ -295,29 +367,69 @@ const TeacherHomework = () => {
           )}
         </div>
       </div>
-      {selectedDiscipline &&
-        selectedClassId &&
-        (assignedHomeworks.length > 0 ? (
-          <div className="card mt-4">
-            <div className="card-header">
-              <h5 className="card-title m-0">
-                Раннее назначенные домашние задания
-              </h5>
+      <div className="card mt-4">
+        <div className="card-header">
+          <h5 className="card-title m-0">Проверка домашних заданий</h5>
+        </div>
+        <div className="card-body">
+          <div className="row">
+            <div className="col-md-6 mb-3">
+              <label htmlFor="disciplineCheckSelect" className="form-label">
+                Выберите дисциплину
+              </label>
+              <select
+                id="disciplineCheckSelect"
+                className="form-select"
+                value={selectedCheckDiscipline}
+                onChange={handleDisciplineChange}
+              >
+                <option value="">Выберите дисциплину</option>
+                {user.classes.map((element, index) => (
+                  <option key={index} value={element.discipline.id}>
+                    {element.discipline.name}
+                  </option>
+                ))}
+              </select>
             </div>
-            <div className="card-body">{renderAssignedHomeworks()}</div>
+            {!isNaN(selectedCheckDiscipline) && selectedCheckDiscipline && (
+              <div className="col-md-6 mb-3">
+                <label htmlFor="classCheckSelect" className="form-label">
+                  Выберите класс
+                </label>
+                <select
+                  id="classCheckSelect"
+                  className="form-select"
+                  value={selectedCheckClassId}
+                  onChange={handleClassChange}
+                >
+                  <option value="">Выберите класс</option>
+                  {filteredCheckClasses.map((classItem, index) => (
+                    <option key={index} value={classItem.id}>
+                      {classItem.number} &quot;{classItem.letter}&quot;
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
           </div>
-        ) : (
-          <div className="card mt-4">
-            <div className="card-header">
-              <h5 className="card-title m-0">
-                Раннее назначенные домашние задания
-              </h5>
-            </div>
-            <div className="card-body">
-              <p className="m-0">Нет ранее заданных домашних заданий</p>
-            </div>
-          </div>
-        ))}
+          {!isNaN(selectedCheckClassId) &&
+            selectedCheckClassId &&
+            (selectedCheckDiscipline && assignedHomeworks.length > 0 ? (
+              renderAssignedHomeworks()
+            ) : (
+              <div className="card mt-4">
+                <div className="card-header">
+                  <h5 className="card-title m-0">
+                    Раннее назначенные домашние задания
+                  </h5>
+                </div>
+                <div className="card-body">
+                  <p className="m-0">Нет ранее заданных домашних заданий</p>
+                </div>
+              </div>
+            ))}
+        </div>
+      </div>
     </div>
   );
 };
