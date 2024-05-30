@@ -24,5 +24,8 @@ Route::middleware(["auth:sanctum"])->group(function () {
     Route::post("/answerStudentHomework/{homeworkId}", [HomeworkAssignmentController::class, "submit"]);
     Route::get("/getHomework/{homeworkId}", [HomeworkAssignmentController::class,"index"]);
     Route::post("/assignHomework", [HomeworkAssignmentController::class, "assignHomework"]);
+    Route::get("/getRelatedToHomeworkStudents/{homeworkId}", [HomeworkAssignmentController::class, "getRelatedHomeworks"]);
+    Route::put("/checkAssignment/{assignmentId}", [HomeworkAssignmentController::class, "checkAssignment"]);
+
     Route::get("/getAssignedHomeworks/{studentClassId}", [HomeworkController::class, "getAssignedHomeworks"]);
 });

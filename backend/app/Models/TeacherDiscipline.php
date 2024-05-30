@@ -21,4 +21,9 @@ class TeacherDiscipline extends Model
     {
         return $this->belongsTo(Discipline::class, 'discipline_id', 'id');
     }
+
+    public function teacher(): BelongsTo
+    {
+        return $this->belongsTo(Teacher::class, 'teacher_id', 'id')->with('user');
+    }
 }

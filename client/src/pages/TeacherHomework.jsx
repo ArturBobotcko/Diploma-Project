@@ -417,7 +417,7 @@ const TeacherHomework = () => {
             (selectedCheckDiscipline && assignedHomeworks.length > 0 ? (
               renderAssignedHomeworks()
             ) : (
-              <div className="card mt-4">
+              <div className="card">
                 <div className="card-header">
                   <h5 className="card-title m-0">
                     Раннее назначенные домашние задания

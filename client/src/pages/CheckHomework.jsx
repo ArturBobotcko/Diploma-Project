@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useStateContext } from '../contexts/ContextProvider';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import axiosClient from '../axios-client';
 
 const CheckHomework = () => {
@@ -17,7 +17,12 @@ const CheckHomework = () => {
       });
   }, [homeworkId]);
 
-  const handleOnStudentClick = () => {};
+  const handleOnStudentClick = (assignmentId, student) => {
+    navigate(
+      `/check-homework/${homeworkId}/check-assignment?assignment=${assignmentId}`,
+      { state: { student } },
+    );
+  };
 
   return (
     <div className="container">
@@ -33,12 +38,24 @@ const CheckHomework = () => {
         </thead>
         <tbody>
           {students.map((student, index) => (
-            <tr key={student.id} onClick={handleOnStudentClick}>
+            <tr
+              key={student.assignment.id}
+              onClick={() =>
+                handleOnStudentClick(student.assignment.id, student)
+              }
+              style={{ cursor: 'pointer' }}
+            >
               <th>{index + 1}</th>
-              <td>{student.name}</td>
-              <td>{student.surname}</td>
-              <td>{student.patronym}</td>
-              <td>{student.completion_status}</td>
+              <td>{student.student_data.name}</td>
+              <td>{student.student_data.surname}</td>
+              <td>{student.student_data.patronym}</td>
+              {student.assignment.completion_status === 0 ? (
+                <td className="bg-danger text-white">Не выполнено</td>
+              ) : student.assignment.checked === 0 ? (
+                <td className="bg-warning text-white">Требует проверки</td>
+              ) : (
+                <td className="bg-success text-white">Проверено</td>
+              )}
             </tr>
           ))}
         </tbody>

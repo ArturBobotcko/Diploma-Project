@@ -137,12 +137,12 @@ const AnswerHomework = () => {
     <div className="container mt-4">
       <div className="card mb-3">
         <div className="card-body">
-          <h2 className="m-0">{homework.description}</h2>
+          <h2 className="m-0 text-dark">{homework.description}</h2>
         </div>
       </div>
       <div className="card">
         <div className="card-body">
-          <h3 className="mb-2">Ответ на задание</h3>
+          <h3 className="mb-3">Ответ на задание</h3>
           {error && <div className="alert alert-danger">{error}</div>}
           <form onSubmit={handleSubmit}>
             <table className="table">
@@ -151,13 +151,21 @@ const AnswerHomework = () => {
                   <th className="ps-1">Состояние ответа на задание</th>
                   {homework.completion_status === 0 ? (
                     <td className="bg-danger text-white">Не выполнено</td>
+                  ) : homework.checked === 0 ? (
+                    <td className="bg-warning text-white">
+                      Отправлено на оценку
+                    </td>
                   ) : (
                     <td className="bg-success text-white">Выполнено</td>
                   )}
                 </tr>
                 <tr>
                   <th className="ps-1">Состояние оценивания</th>
-                  <td>TODO: Сделать оценивание</td>
+                  {homework.checked === 0 ? (
+                    <td className="bg-danger text-white">Не оценено</td>
+                  ) : (
+                    <td className="bg-success text-white">Оценено</td>
+                  )}
                 </tr>
                 <tr>
                   <th className="ps-1">Последний срок сдачи</th>
@@ -240,20 +248,37 @@ const AnswerHomework = () => {
       </div>
       <div className="card mt-4">
         <div className="card-body">
-          <h3 className="mb-3">Отзыв</h3>
+          <h3 className="mb-3">Отзыв учителя</h3>
           <table className="table">
             <tbody>
               <tr>
                 <th className="ps-1">Оценка</th>
-                <td>сколько?</td>
+                {homework.grade !== null ? (
+                  <td>
+                    <span
+                      className={`p-1 badge ${homework.grade <= 3.4 ? 'bg-danger' : homework.grade <= 4.4 ? 'bg-warning' : 'bg-success'}`}
+                    >
+                      {homework.grade}
+                    </span>
+                  </td>
+                ) : (
+                  <td>Не оценено</td>
+                )}
               </tr>
               <tr>
-                <th className="ps-1">Оценено в</th>
-                <td>время</td>
+                <th className="ps-1">Время оценивания</th>
+                {homework.checked_at !== null ? (
+                  <td>{formatDate(homework.checked_at)}</td>
+                ) : (
+                  <td>Не оценено</td>
+                )}
               </tr>
               <tr>
-                <th className="ps-1">Оценено</th>
-                <td>Фио препода</td>
+                <th className="ps-1">Учитель</th>
+                <td>
+                  {homework.teacher.surname} {homework.teacher.name}{' '}
+                  {homework.teacher.patronym}
+                </td>
               </tr>
             </tbody>
           </table>

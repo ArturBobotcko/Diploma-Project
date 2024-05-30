@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('discipline_id');
             $table->string('grade_type');
             $table->integer('grade_value');
-            $table->string('comment');
+            $table->string('comment')->nullable();
             $table->timestamps();
 
             $table->foreign('student_id')->references('id')->on('students');

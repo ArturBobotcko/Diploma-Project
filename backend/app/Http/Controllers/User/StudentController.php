@@ -127,7 +127,7 @@ class StudentController extends Controller
             foreach ($homework_assignments as $homework_assignment) {
                 $teacher_discipline = $homework->discipline;
                 $discipline = $teacher_discipline ? $teacher_discipline->discipline : null;
-
+                $grade = $homework_assignment->grade !== null ? $homework_assignment->grade->grade_value : null;
                 // Проверяем наличие дисциплины
                 if ($discipline) {
                     $homework_data = [
@@ -136,6 +136,10 @@ class StudentController extends Controller
                         'description' => $homework->description,
                         'deadline' => $homework->deadline,
                         'completion_status' => $homework_assignment->completion_status,
+                        'teacher_note' => $homework_assignment->teacher_note,
+                        'checked' => $homework_assignment->checked,
+                        'grade' => $grade,
+                        'checked_at' => $homework_assignment->checked_at,
                     ];
                     $homeworks_data[] = $homework_data;
                 }

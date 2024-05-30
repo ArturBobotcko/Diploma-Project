@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Teacher extends Model
 {
@@ -21,5 +22,10 @@ class Teacher extends Model
     public function disciplines(): BelongsToMany
     {
         return $this->belongsToMany(Discipline::class,"teachers_disciplines","teacher_id","discipline_id");
+    }
+
+    public function user(): HasOne
+    {
+        return $this->hasOne(User::class, 'id');
     }
 }
