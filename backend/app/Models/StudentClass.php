@@ -31,4 +31,14 @@ class StudentClass extends Model
     {
         return $this->hasMany(Student::class);
     }
+
+    public function teacherDisciplines()
+    {
+        return $this->belongsToMany(
+            TeacherDiscipline::class,
+            'discipline_student_classes',
+            'student_class_id',
+            'teacher_discipline_id'
+        );
+    }
 }

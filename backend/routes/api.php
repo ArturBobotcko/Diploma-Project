@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\HomeworkAssignmentController;
 use App\Http\Controllers\HomeworkController;
+use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\StudentClassController;
 use App\Http\Controllers\User\ParentController;
 use App\Http\Controllers\User\StudentController;
@@ -28,4 +29,6 @@ Route::middleware(["auth:sanctum"])->group(function () {
     Route::put("/checkAssignment/{assignmentId}", [HomeworkAssignmentController::class, "checkAssignment"]);
 
     Route::get("/getAssignedHomeworks/{studentClassId}", [HomeworkController::class, "getAssignedHomeworks"]);
+
+    Route::get("/getStudentSchedule/{studentId}", [ScheduleController::class,"getStudentSchedule"]);
 });

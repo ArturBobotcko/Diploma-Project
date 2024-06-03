@@ -14,6 +14,7 @@ import HomeworkLayout from './components/HomeworkLayout';
 import AnswerHomework from './pages/AnswerHomework';
 import CheckHomework from './pages/CheckHomework';
 import CheckAssignment from './pages/CheckAssignment';
+import ScheduleLayout from './components/ScheduleLayout';
 
 const router = createBrowserRouter([
   {
@@ -59,6 +60,10 @@ const router = createBrowserRouter([
       {
         path: '/check-homework/:homeworkId/check-assignment',
         element: <CheckAssignment />,
+      },
+      {
+        path: '/schedule',
+        element: <ScheduleLayout />,
       },
     ],
   },

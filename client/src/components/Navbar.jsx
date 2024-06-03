@@ -3,7 +3,7 @@ import logo from '../assets/logo.svg';
 const Navbar = ({ onLogout, userId }) => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-white border-bottom">
-      <div className="container">
+      <div className="container mt-0">
         <a className="navbar-brand" href="/">
           <img src={logo} width="36" />
         </a>
@@ -31,8 +31,8 @@ const Navbar = ({ onLogout, userId }) => {
               </a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#">
-                Сообщения
+              <a className="nav-link" href="/schedule">
+                Расписание
               </a>
             </li>
           </ul>

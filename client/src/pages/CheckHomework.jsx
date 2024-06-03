@@ -49,7 +49,7 @@ const CheckHomework = () => {
               <td>{student.student_data.name}</td>
               <td>{student.student_data.surname}</td>
               <td>{student.student_data.patronym}</td>
-              {student.assignment.completion_status === 0 ? (
+              {student.student_data.completion_status === 0 ? (
                 <td className="bg-danger text-white">Не выполнено</td>
               ) : student.assignment.checked === 0 ? (
                 <td className="bg-warning text-white">Требует проверки</td>

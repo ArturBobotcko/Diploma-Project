@@ -24,4 +24,9 @@ class HomeworkAssigment extends Model
     {
         return $this->belongsTo(Grade::class);
     }
+
+    public function homework(): BelongsTo
+    {
+        return $this->belongsTo(Homework::class);
+    }
 }

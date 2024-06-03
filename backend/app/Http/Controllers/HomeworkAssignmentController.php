@@ -45,7 +45,7 @@ class HomeworkAssignmentController extends Controller
     {
         $request->validate([
             'response_text' => 'nullable|string',
-            'file' => 'nullable|file|mimes:pdf,doc,docx,txt,jpg,png',
+            'file' => 'nullable|file',
             'done_at' => 'timestamp'
         ]);
 
@@ -70,7 +70,6 @@ class HomeworkAssignmentController extends Controller
 
         return response()->json(['message' => 'Homework successfully saved']);
     }
-
 
     public function assignHomework(Request $request)
     {

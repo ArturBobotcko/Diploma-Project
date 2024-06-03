@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Discipline;
 use App\Models\Role;
+use App\Models\Schedule;
 use App\Models\Student;
 use App\Models\StudentClass;
 use App\Models\TeacherDiscipline;
@@ -90,6 +91,16 @@ class DatabaseSeeder extends Seeder
             'password' => 123,
         ]);
 
+        // Учитель 2 (id 7)
+        User::create([
+            'surname' => 'Воронина',
+            'name' => 'Галина',
+            'patronym' => '',
+            'email' => 'voronina_g@mail.com',
+            'role_id' => '1',
+            'password' => 123,
+        ]);
+
         Student::where('id', 3)->update([
             'student_class_id' => 1,
         ]);
@@ -116,6 +127,16 @@ class DatabaseSeeder extends Seeder
             'student_id' => 4,
         ]);
 
+        DB::table('parents_students')->insert([
+            'parent_id' => 1,
+            'student_id' => 5,
+        ]);
+
+        DB::table('parents_students')->insert([
+            'parent_id' => 1,
+            'student_id' => 6,
+        ]);
+
         TeacherDiscipline::create([
             'teacher_id' => 2,
             'discipline_id' => 1,
@@ -126,6 +147,21 @@ class DatabaseSeeder extends Seeder
             'discipline_id' => 2,
         ]);
 
+        TeacherDiscipline::create([
+            'teacher_id' => 7,
+            'discipline_id' => 1,
+        ]);
+
+        TeacherDiscipline::create([
+            'teacher_id' => 7,
+            'discipline_id' => 2,
+        ]);
+
+        TeacherDiscipline::create([
+            'teacher_id' => 7,
+            'discipline_id' => 3,
+        ]);
+
         DB::table('discipline_student_classes')->insert([
             'student_class_id' => 1,
             'teacher_discipline_id' => 1,
@@ -137,6 +173,21 @@ class DatabaseSeeder extends Seeder
         ]);
 
         DB::table('discipline_student_classes')->insert([
+            'student_class_id' => 1,
+            'teacher_discipline_id' => 3,
+        ]);
+
+        DB::table('discipline_student_classes')->insert([
+            'student_class_id' => 1,
+            'teacher_discipline_id' => 4,
+        ]);
+
+        DB::table('discipline_student_classes')->insert([
+            'student_class_id' => 1,
+            'teacher_discipline_id' => 5,
+        ]);
+
+        DB::table('discipline_student_classes')->insert([
             'student_class_id' => 2,
             'teacher_discipline_id' => 1,
         ]);
@@ -144,6 +195,42 @@ class DatabaseSeeder extends Seeder
         DB::table('discipline_student_classes')->insert([
             'student_class_id' => 2,
             'teacher_discipline_id' => 2,
+        ]);
+
+        // 10 "А", Николай, 3 июня, 8 утра, хор
+        Schedule::create([
+            'teacher_discipline_id' => 1,
+            'student_class_id' => 1,
+            'day_of_week' => '2024-06-03',
+            'start_time' => '08:00:00',
+            'end_time' => '08:45:00',
+        ]);
+
+        // 7 "Б", Николай, 3 июня, 9 утра, хор
+        Schedule::create([
+            'teacher_discipline_id' => 1,
+            'student_class_id' => 2,
+            'day_of_week' => '2024-06-03',
+            'start_time' => '09:00:00',
+            'end_time' => '09:45:00',
+        ]);
+
+        // 7 "Б", Николай, 3 июня, 10 утра, пение
+        Schedule::create([
+            'teacher_discipline_id' => 2,
+            'student_class_id' => 2,
+            'day_of_week' => '2024-06-03',
+            'start_time' => '10:00:00',
+            'end_time' => '10:45:00',
+        ]);
+
+        // 10 "A", Николай, 5 июня, 10 утра, пение
+        Schedule::create([
+            'teacher_discipline_id' => 2,
+            'student_class_id' => 1,
+            'day_of_week' => '2024-06-05',
+            'start_time' => '10:00:00',
+            'end_time' => '10:45:00',
         ]);
     }
 }

@@ -110,7 +110,7 @@ const CheckAssignment = () => {
 
   const getRemainingTimeData = () => {
     return calculateRemainingTime(
-      student.assignment.completion_status,
+      student.student_data.completion_status,
       student.assignment.deadline,
       student.assignment.done_at,
     );
@@ -141,19 +141,14 @@ const CheckAssignment = () => {
           </tr>
           <tr>
             <th>Дата выполнения</th>
-            {/* <td>
-              {student.assignment.done_at
-                ? formatDate(student.assignment.done_at)
-                : 'Не выполнено'}
-            </td> */}
-            {student.assignment.completion_status === 0 ? (
+            {student.student_data.completion_status === 0 ? (
               isLate ? (
                 <td>
                   Ответ просрочен на <br />
                   {remainingTimeText}
                 </td>
               ) : (
-                <td>{remainingTimeText}</td>
+                <td>Осталось {remainingTimeText}</td>
               )
             ) : isLate ? (
               <td className="bg-danger text-white">

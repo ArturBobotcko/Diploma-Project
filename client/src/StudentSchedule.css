@@ -1,0 +1,157 @@
+/* FullCalendar toolbar */
+.fc .fc-toolbar {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.fc .fc-toolbar-title {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #343a40;
+}
+
+.fc .fc-button {
+  background-color: #007bff;
+  border: none;
+  color: white;
+  transition: background-color 0.3s ease;
+  border-radius: 4px;
+  padding: 0.375rem 0.75rem;
+}
+
+.fc .fc-button:hover {
+  background-color: #0056b3;
+}
+
+.fc .fc-button:disabled {
+  background-color: #c0c0c0;
+}
+
+.fc .fc-button-group > .fc-button {
+  margin-left: 5px;
+}
+
+/* FullCalendar day grid */
+.fc .fc-daygrid-day {
+  border: 1px solid #dee2e6;
+}
+
+.fc .fc-daygrid-day-top {
+  text-align: right;
+  padding: 0.5rem;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+  color: #495057;
+  font-weight: 500;
+}
+
+.fc .fc-daygrid-day-events {
+  padding: 0.5rem;
+  margin: 0;
+}
+
+.fc .fc-daygrid-event {
+  margin-bottom: 0.5rem; /* Расстояние между событиями */
+}
+
+/* FullCalendar events */
+.fc .fc-event {
+  background-color: #007bff; /* Цвет фона событий */
+  color: white; /* Цвет текста событий */
+  border: none; /* Убираем границу */
+  border-radius: 4px; /* Скругляем углы */
+  padding: 0.25rem 0.5rem; /* Добавляем внутренние отступы */
+  font-size: 0.875rem; /* Уменьшаем размер шрифта */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Добавляем тень */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  position: relative;
+}
+
+/* Tooltip for event content */
+.fc .fc-event .tooltip {
+  display: none;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.75);
+  color: white;
+  padding: 5px;
+  border-radius: 3px;
+  z-index: 1000;
+  white-space: normal;
+  max-width: 200px;
+}
+
+.fc .fc-event:hover .tooltip {
+  display: block;
+}
+
+/* Slot labels */
+.fc .fc-timegrid-slot-label {
+  font-size: 0.875rem;
+}
+
+/* Event content */
+.event-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  text-align: left;
+}
+
+.event-content .tooltip {
+  display: none;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.75);
+  color: white;
+  padding: 0.5rem;
+  border-radius: 4px;
+  z-index: 1000;
+}
+
+/* Add some margin for the calendar */
+.container {
+  margin-top: 20px;
+}
+
+h2 {
+  font-size: 1.75rem;
+  margin-bottom: 20px;
+  color: #343a40;
+}
+
+/* Custom styles */
+.fc-day-today .fc-daygrid-day-top {
+  background-color: rgba(255, 219, 40, 0);
+}
+
+.fc-col-header {
+  background-color: #007bff;
+}
+
+.fc-col-header-cell-cushion {
+  color: white;
+}
+
+.fc-col-header-cell-cushion:hover {
+  color: white;
+}
+
+.fc .fc-daygrid-day-number {
+  color: #495057; /* Цвет номера дня */
+  font-weight: 500; /* Толщина шрифта */
+}
+
+.fc .fc-daygrid-day-frame {
+  padding: 0.75rem; /* Внутренний отступ */
+}
+
+.fc .fc-event:hover {
+  background-color: #0056b3;
+}
+
+.fc .fc-daygrid-day-frame {
+  border: 1px solid #dee2e6; /* Цвет границы */
+}

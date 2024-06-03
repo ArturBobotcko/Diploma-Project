@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\Grade;
 use App\Models\Homework;
+use App\Models\HomeworkAssigment;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -110,39 +111,64 @@ class StudentController extends Controller
         $student = Student::findOrFail($studentId);
         $studentClassId = $student->studentClass->id;
 
-        // Получаем значение teacher_discipline_id из запроса
-        $teacherDisciplineId = $request->query('teacher_discipline');
-
-        // Формируем запрос на получение домашних заданий по student_class_id и teacher_discipline_id
-        $homeworks = Homework::where('student_class_id', $studentClassId)
-            ->where('teacher_discipline_id', $teacherDisciplineId)
-            ->get();
-
-        // Формируем ответ
         $homeworks_data = [];
-        foreach ($homeworks as $homework) {
-            // Получаем назначения домашнего задания для данного студента
-            $homework_assignments = $homework->assignment->where('student_id', $studentId);
+        if ($request->query('teacher_discipline')) {
+            // Получаем значение teacher_discipline_id из запроса
+            $teacherDisciplineId = $request->query('teacher_discipline');
 
-            foreach ($homework_assignments as $homework_assignment) {
+            // Формируем запрос на получение домашних заданий по student_class_id и teacher_discipline_id
+            $homeworks = Homework::where('student_class_id', $studentClassId)
+                ->where('teacher_discipline_id', $teacherDisciplineId)
+                ->get();
+
+            foreach ($homeworks as $homework) {
+                // Получаем назначения домашнего задания для данного студента
+                $homework_assignments = $homework->assignment->where('student_id', $studentId);
+
+                foreach ($homework_assignments as $homework_assignment) {
+                    $teacher_discipline = $homework->discipline;
+                    $discipline = $teacher_discipline ? $teacher_discipline->discipline : null;
+                    $grade = $homework_assignment->grade !== null ? $homework_assignment->grade->grade_value : null;
+                    // Проверяем наличие дисциплины
+                    if ($discipline) {
+                        $homework_data = [
+                            'id' => $homework->id,
+                            'discipline' => $discipline->name,
+                            'description' => $homework->description,
+                            'deadline' => $homework->deadline,
+                            'completion_status' => $homework_assignment->completion_status,
+                            'teacher_note' => $homework_assignment->teacher_note,
+                            'checked' => $homework_assignment->checked,
+                            'grade' => $grade,
+                            'checked_at' => $homework_assignment->checked_at,
+                        ];
+                        $homeworks_data[] = $homework_data;
+                    }
+                }
+            }
+        } else {
+            $homeworksAssignments = HomeworkAssigment::where('student_id', $studentId)->get();
+            // dd($homeworksAssignments);
+            foreach($homeworksAssignments as $homeworkAssignment)
+            {
+                $homework = $homeworkAssignment->homework;
                 $teacher_discipline = $homework->discipline;
                 $discipline = $teacher_discipline ? $teacher_discipline->discipline : null;
-                $grade = $homework_assignment->grade !== null ? $homework_assignment->grade->grade_value : null;
-                // Проверяем наличие дисциплины
-                if ($discipline) {
-                    $homework_data = [
-                        'id' => $homework->id,
-                        'discipline' => $discipline->name,
-                        'description' => $homework->description,
-                        'deadline' => $homework->deadline,
-                        'completion_status' => $homework_assignment->completion_status,
-                        'teacher_note' => $homework_assignment->teacher_note,
-                        'checked' => $homework_assignment->checked,
-                        'grade' => $grade,
-                        'checked_at' => $homework_assignment->checked_at,
-                    ];
-                    $homeworks_data[] = $homework_data;
-                }
+                $grade = $homeworkAssignment->grade !== null ? $homeworkAssignment->grade->grade_value : null;
+                // dd($discipline);
+                $homework_data = [
+                    'id' => $homework->id,
+                    'discipline' => $discipline->name,
+                    'description' => $homework->description,
+                    'deadline' => $homework->deadline,
+                    'completion_status' => $homeworkAssignment->completion_status,
+                    'teacher_note' => $homeworkAssignment->teacher_note,
+                    'checked' => $homeworkAssignment->checked,
+                    'grade' => $grade,
+                    'checked_at' => $homeworkAssignment->checked_at,
+                    'done_at' => $homeworkAssignment->done_at,
+                ];
+                $homeworks_data[] = $homework_data;
             }
         }
 
