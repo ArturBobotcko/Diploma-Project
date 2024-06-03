@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use App\Casts\TimeCast;
+use App\Models\StudentClass;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Schedule extends Model
 {
@@ -27,9 +30,8 @@ class Schedule extends Model
         ];
     }
 
-    // public function getDayOfWeekAttribute($value)
-    // {
-    //     $dayOfWeek = Carbon::parse($value)->locale('ru')->translatedFormat('l');
-    //     return mb_convert_case($dayOfWeek, MB_CASE_TITLE, "UTF-8");
-    // }
+    public function studentClass(): BelongsTo
+    {
+        return $this->belongsTo(StudentClass::class);
+    }
 }

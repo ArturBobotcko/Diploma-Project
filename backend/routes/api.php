@@ -31,4 +31,5 @@ Route::middleware(["auth:sanctum"])->group(function () {
     Route::get("/getAssignedHomeworks/{studentClassId}", [HomeworkController::class, "getAssignedHomeworks"]);
 
     Route::get("/getStudentSchedule/{studentId}", [ScheduleController::class,"getStudentSchedule"]);
+    Route::get("/getTeacherSchedule/{teacherId}", [ScheduleController::class,"getTeacherSchedule"]);
 });
