@@ -56,7 +56,7 @@ const StudentSchedule = () => {
         ? `${teacher.user.surname} ${teacher.user.name} ${teacher.user.patronym}`
         : `${teacher.user.surname} ${teacher.user.name}`;
       return {
-        title: `${teacherFullName}`,
+        title: `${discipline}\n${teacherFullName}`,
         start,
         end,
         allDay: false,
@@ -72,10 +72,13 @@ const StudentSchedule = () => {
       'HH:mm',
     );
     const endTime = DateTime.fromJSDate(eventInfo.event.end).toFormat('HH:mm');
+    const [discipline, teacherFullName] = eventInfo.event.title.split('\n');
+
     return (
       <div className="event-content p-1">
         <b>{`${startTime} - ${endTime}`}</b>
-        <i>{` ${eventInfo.event.title}`}</i>
+        <i>{` ${discipline}`}</i>
+        <i>{` ${teacherFullName}`}</i>
         <div className="tooltip">{eventInfo.event.extendedProps.fullTitle}</div>
       </div>
     );

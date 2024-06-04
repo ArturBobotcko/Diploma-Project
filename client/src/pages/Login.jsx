@@ -85,10 +85,6 @@ const Login = () => {
               )}
             </div>
             <div className="container-fluid p-0 d-flex flex-row align-items-center mb-3">
-              <div className="form-check text-start me-auto">
-                <input type="checkbox" className="form-check-input"></input>
-                <label className="form-check-label">Запомнить меня</label>
-              </div>
               <p className="m-0">
                 <a className="link-opacity-75-hover" href="#">
                   Забыли пароль?

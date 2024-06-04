@@ -174,11 +174,6 @@ class DatabaseSeeder extends Seeder
 
         DB::table('discipline_student_classes')->insert([
             'student_class_id' => 1,
-            'teacher_discipline_id' => 3,
-        ]);
-
-        DB::table('discipline_student_classes')->insert([
-            'student_class_id' => 1,
             'teacher_discipline_id' => 4,
         ]);
 
